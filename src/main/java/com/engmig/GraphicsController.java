@@ -1,0 +1,55 @@
+package com.engmig;
+
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+
+public class GraphicsController {
+
+    private static GraphicsController graphicsController;
+    private static GraphicsContext gc;
+    private static boolean recording;
+
+    public GraphicsController(GraphicsContext graphicContext){
+         gc = graphicContext;
+    }
+
+    public GraphicsController(){
+
+    }
+    // Static Factory Method
+    public static GraphicsController getInstance(){
+        if (graphicsController != null){
+            graphicsController = new GraphicsController();
+        }
+        return graphicsController;
+    }
+
+    public static GraphicsController newGraphicsHandler(GraphicsContext graphicsContext){
+        graphicsController = new GraphicsController(graphicsContext);
+        return graphicsController;
+    }
+
+    public static GraphicsContext getGc() {
+        return gc;
+    }
+
+    public void update(){
+        // In here update the canvas based on the graph
+        gc.setFill(Color.web("#43434cff"));
+        gc.fillRect(0,0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
+
+        gc.setFill(Color.web("#43434cff"));
+        Vertex vertex = new Vertex(100,100);
+        // Here is where we could also start to take the snapshots of the canvas
+        gc.setFill(Color.DARKKHAKI);
+        vertex.draw(gc);
+    }
+
+    public void startRecording(){
+        recording = true;
+    }
+
+    public void stopRecording(){
+        recording = false;
+    }
+}

@@ -9,6 +9,7 @@ module com.engmig {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
+    requires vecmath;
 
     opens com.engmig to javafx.fxml;
     exports com.engmig;

@@ -10,8 +10,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class Main extends Application {
+    private Timer timer;
+    GraphicsController graphicsController;
 
-    GraphicsHandler gh;
     @Override
     public void start(Stage primaryStage){
 
@@ -19,14 +20,16 @@ public class Main extends Application {
         Region screenRoot = screenBuilder.build();
         Scene scene = new Scene(screenRoot);
 
-        gh = GraphicsHandler.newGraphicsHandler(screenBuilder.getCanvas().getGraphicsContext2D());
+        graphicsController = GraphicsController.newGraphicsHandler(screenBuilder.getCanvas().getGraphicsContext2D());
 
         primaryStage.setScene(scene);
         primaryStage.show();
+
+        startTimer();
     }
 
     private void startTimer(){
-        Timer timer = new Timer();
+        timer = new Timer();
 
         TimerTask task = new TimerTask(){
             @Override
@@ -35,14 +38,19 @@ public class Main extends Application {
 
                 Platform.runLater(() ->{
                     // This runs on Application Thread. Use to update UI
+                    graphicsController.update();
 
                 });
             }
         };
+        timer.scheduleAtFixedRate(task, 0 ,33);
     }
 
     @Override
     public void stop(){
+        if (timer != null){
+            timer.cancel();
+        }
         System.exit(0);
     }
 }
