@@ -10,6 +10,8 @@ module com.engmig {
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
     requires vecmath;
+    requires java.desktop;
+    requires javafx.swing;
 
     opens com.engmig to javafx.fxml;
     exports com.engmig;

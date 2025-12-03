@@ -9,12 +9,15 @@ public class GraphicsController {
     private static GraphicsContext gc;
     private static boolean recording;
 
+    private GraphicsRecorder recorder;
+
     public GraphicsController(GraphicsContext graphicContext){
          gc = graphicContext;
+         recorder = new GraphicsRecorder();
     }
 
     public GraphicsController(){
-
+        recorder = new GraphicsRecorder();
     }
     // Static Factory Method
     public static GraphicsController getInstance(){
@@ -43,13 +46,14 @@ public class GraphicsController {
         // Here is where we could also start to take the snapshots of the canvas
         gc.setFill(Color.DARKKHAKI);
         vertex.draw(gc);
+        recorder.record(gc.getCanvas());
     }
 
     public void startRecording(){
-        recording = true;
+        recorder.start();
     }
 
     public void stopRecording(){
-        recording = false;
+        recorder.stop();
     }
 }
