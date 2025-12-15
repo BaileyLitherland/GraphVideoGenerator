@@ -35,7 +35,7 @@ public class GraphicsController {
     public static GraphicsContext getGc() {
         return gc;
     }
-
+    int count = 0;
     public void update(){
         // In here update the canvas based on the graph
         gc.setFill(Color.web("#43434cff"));
@@ -47,6 +47,12 @@ public class GraphicsController {
         gc.setFill(Color.DARKKHAKI);
         vertex.draw(gc);
         recorder.record(gc.getCanvas());
+        count += 1;
+        System.out.println(count);
+        if (count == 240){
+            recorder.stop();
+        }
+
     }
 
     public void startRecording(){
