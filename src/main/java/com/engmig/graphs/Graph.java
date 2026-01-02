@@ -1,4 +1,6 @@
-package com.engmig;
+package com.engmig.graphs;
+
+import com.engmig.Vertex;
 
 import java.util.ArrayList;
 
