@@ -1,7 +1,10 @@
 package com.engmig;
 
+import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+
+import java.io.IOException;
 
 public class GraphicsController {
 
@@ -46,10 +49,16 @@ public class GraphicsController {
         // Here is where we could also start to take the snapshots of the canvas
         gc.setFill(Color.DARKKHAKI);
         vertex.draw(gc);
-        // recorder.record(gc.getCanvas());
-//        if (count == 240){
-//            recorder.stop();
-//        }
+        try {
+            recorder.record(gc.getCanvas());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+/*
+        if (count == 240){
+            recorder.stop();
+        }
+*/
 
     }
 
