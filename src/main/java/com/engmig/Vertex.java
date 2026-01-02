@@ -14,4 +14,6 @@ public class Vertex {
     public void draw(GraphicsContext gc){
         gc.fillOval(pos.getX()-5, pos.getY()-5, 10,10);
     }
+
+    //public void moveTo(double x, double y, AnimationTimer)
 }

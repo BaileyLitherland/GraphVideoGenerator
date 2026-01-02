@@ -46,12 +46,10 @@ public class GraphicsController {
         // Here is where we could also start to take the snapshots of the canvas
         gc.setFill(Color.DARKKHAKI);
         vertex.draw(gc);
-        recorder.record(gc.getCanvas());
-        count += 1;
-        System.out.println(count);
-        if (count == 240){
-            recorder.stop();
-        }
+        // recorder.record(gc.getCanvas());
+//        if (count == 240){
+//            recorder.stop();
+//        }
 
     }
 

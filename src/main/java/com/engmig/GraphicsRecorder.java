@@ -17,7 +17,8 @@ import java.util.*;
 import static java.io.FileDescriptor.out;
 
 public class GraphicsRecorder {
-    boolean recording = true;
+    boolean recording = false; // Make true when you decide to record again
+
     int imageCount = 0;
     List<BufferedImage> images = new ArrayList<BufferedImage>();
 
@@ -50,6 +51,7 @@ public class GraphicsRecorder {
     }
 
     public void finishRecording(){
+        // TODO: Change this to a FFMPEG Implimentation to hopefully render faster
         System.out.println("start Finishing up the video");
         File outputFile = new File("video.mp4");
 
