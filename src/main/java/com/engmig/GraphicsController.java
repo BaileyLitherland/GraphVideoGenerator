@@ -54,11 +54,11 @@ public class GraphicsController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-/*
-        if (count == 240){
+        count += 1;
+        if (count == 24){
             recorder.stop();
         }
-*/
+
 
     }
 
