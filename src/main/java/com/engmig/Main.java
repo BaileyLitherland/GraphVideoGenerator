@@ -20,11 +20,15 @@ public class Main extends Application {
         Region screenRoot = screenBuilder.build();
         Scene scene = new Scene(screenRoot);
 
+        System.out.println("We have built the scene");
+
         graphicsController = GraphicsController.newGraphicsHandler(screenBuilder.getCanvas().getGraphicsContext2D());
+
+        System.out.println("graphics Controller Initalised");
 
         primaryStage.setScene(scene);
         primaryStage.show();
-
+        System.out.println("We get to the show part");
         startTimer();
     }
 

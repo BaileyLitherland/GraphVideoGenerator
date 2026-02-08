@@ -28,10 +28,8 @@ public class ScreenBuilder implements Builder<Region>{
 
     private Node createCanvas(){
         Canvas canvas = new Canvas();
-        canvas.setWidth(2560);
-        canvas.setHeight(1440);
-//        canvas.setWidth(1280);
-//        canvas.setHeight(720);
+        canvas.setWidth(3840);
+        canvas.setHeight(2160);
 
         canvas.getGraphicsContext2D().setFill(Color.web("#43434cff"));
         canvas.getGraphicsContext2D().fillRect(0,0, canvas.getWidth(), canvas.getHeight());

@@ -50,15 +50,16 @@ public class GraphicsController {
         gc.setFill(Color.DARKKHAKI);
         vertex.draw(gc);
         try {
-            recorder.record(gc.getCanvas());
+            if (count < 64){
+                recorder.record(gc.getCanvas());
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
         count += 1;
-        if (count == 24){
+        if (count == 64){
             recorder.stop();
         }
-
 
     }
 
