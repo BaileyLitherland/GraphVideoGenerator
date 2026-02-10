@@ -45,20 +45,27 @@ public class GraphicsController {
         gc.fillRect(0,0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
 
         gc.setFill(Color.web("#43434cff"));
-        Vertex vertex = new Vertex(100,100);
+        Vertex vertex = new Vertex(3840/2,2160/2);
         // Here is where we could also start to take the snapshots of the canvas
         gc.setFill(Color.DARKKHAKI);
         vertex.draw(gc);
+//        try {
+//            if (count < 1000){
+//                recorder.record(gc.getCanvas());
+//            }
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+        count += 1;
+//        if (count == 1000){
+//            recorder.stop();
+//        }
         try {
-            if (count < 1000){
-                recorder.record(gc.getCanvas());
+            if (count == 1) {
+                recorder.screenShot(gc.getCanvas());
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
-        }
-        count += 1;
-        if (count == 1000){
-            recorder.stop();
         }
 
     }

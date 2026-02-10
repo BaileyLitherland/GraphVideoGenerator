@@ -116,6 +116,16 @@ public class GraphicsRecorder {
     }
 
 
+    public void screenShot(Canvas canvas) throws IOException{
+        WritableImage canvasSnapshot = canvas.snapshot(null,null);
+        BufferedImage bimg = SwingFXUtils.fromFXImage(canvasSnapshot, null);
+        BufferedImage bimgEdited = new BufferedImage(bimg.getWidth(),bimg.getHeight(),BufferedImage.TYPE_3BYTE_BGR);
+        bimgEdited.getGraphics().drawImage(bimg, 0, 0, null);
+        File outputFile = new File("Image01.png");
+        ImageIO.write(bimgEdited, "png", outputFile);
+        System.out.println("Screen shot taken");
+    }
+
 
 
     public void createMP4(){

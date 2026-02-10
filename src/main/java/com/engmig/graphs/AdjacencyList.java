@@ -10,7 +10,7 @@ public class AdjacencyList extends Graph{
 
     ArrayList<ArrayList<Integer>> edges = new ArrayList<ArrayList<Integer>>();
 
-    Vertex nullVertex = new Vertex(true);
+    Vertex nullVertex = new Vertex();
 
     /**
      * @param x the first vertices
