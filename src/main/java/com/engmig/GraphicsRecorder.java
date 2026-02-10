@@ -75,13 +75,13 @@ public class GraphicsRecorder {
         WritableImage canvasSnapshot = canvas.snapshot(null,null);
 
         BufferedImage bimg = SwingFXUtils.fromFXImage(canvasSnapshot, null);
-        images.add(bimg);
+        //images.add(bimg);
         // Convert to the right RBG format
-        // BufferedImage bimgEdited = new BufferedImage(bimg.getWidth(),bimg.getHeight(),BufferedImage.TYPE_3BYTE_BGR);
-        // bimgEdited.getGraphics().drawImage(bimg, 0, 0, null);
-        //Frame frame = converter.getFrame(bimg);
+         BufferedImage bimgEdited = new BufferedImage(bimg.getWidth(),bimg.getHeight(),BufferedImage.TYPE_3BYTE_BGR);
+         bimgEdited.getGraphics().drawImage(bimg, 0, 0, null);
+        Frame frame = converter.getFrame(bimgEdited);
 
-        //recorder.record(frame);
+        recorder.record(frame);
 
         imageCount += 1;
 
@@ -96,11 +96,11 @@ public class GraphicsRecorder {
         startTime = System.currentTimeMillis();
 
         try {
-            for (BufferedImage bimg: images){
-                BufferedImage bimgEdited = new BufferedImage(bimg.getWidth(),bimg.getHeight(),BufferedImage.TYPE_3BYTE_BGR);
-                bimgEdited.getGraphics().drawImage(bimg, 0, 0, null);
-                Frame frame = converter.getFrame(bimgEdited);
-            }
+//            for (BufferedImage bimg: images){
+//                BufferedImage bimgEdited = new BufferedImage(bimg.getWidth(),bimg.getHeight(),BufferedImage.TYPE_3BYTE_BGR);
+//                bimgEdited.getGraphics().drawImage(bimg, 0, 0, null);
+//                Frame frame = converter.getFrame(bimgEdited);
+//            }
 
             recorder.stop();
             recorder.release();
