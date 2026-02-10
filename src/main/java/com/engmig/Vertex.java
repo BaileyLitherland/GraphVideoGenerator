@@ -17,7 +17,7 @@ public class Vertex {
     }
 
     public void draw(GraphicsContext gc){
-        gc.fillOval(pos.getX(), pos.getY(), 40,40);
+        gc.fillOval(pos.getX(), pos.getY(), 10,10);
     }
 
 }
