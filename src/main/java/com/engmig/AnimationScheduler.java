@@ -1,6 +1,7 @@
 package com.engmig;
 
 import com.engmig.animations.Animation;
+import com.engmig.animations.EaseOutCubic;
 import com.engmig.animations.LinearAnimation;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -29,6 +30,11 @@ public class AnimationScheduler {
 
     public void createLinearAnimation(Drawable object, Vector3d startPosition, Vector3d endPosition, int numFrames, int startFrame){
         LinearAnimation animation = new LinearAnimation(object,startPosition, endPosition, numFrames, startFrame);
+        addAnimation(animation);
+    }
+
+    public void createEaseOutAnimation(Drawable object, Vector3d startPosition, Vector3d endPosition, int numFrames, int startFrame){
+        EaseOutCubic animation = new EaseOutCubic(object,startPosition, endPosition, numFrames, startFrame);
         addAnimation(animation);
     }
 

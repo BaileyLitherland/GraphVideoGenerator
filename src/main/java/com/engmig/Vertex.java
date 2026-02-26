@@ -9,7 +9,7 @@ import javax.vecmath.Vector3d;
 
 public class Vertex implements Drawable {
     Vector3d pos;
-    double radius = 40;
+    double radius = 200;
     Color colour = Color.DARKKHAKI;
 
     public Vertex(double x, double y){

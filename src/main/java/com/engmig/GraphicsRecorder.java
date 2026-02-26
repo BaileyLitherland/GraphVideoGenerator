@@ -27,7 +27,7 @@ import static java.io.FileDescriptor.out;
 
 public class GraphicsRecorder {
 
-    boolean recording = false; // Make true when you decide to record again
+    boolean recording = true; // Make true when you decide to record again
 
     // FFmpeg recorder classes
     private FFmpegFrameRecorder recorder;
@@ -60,12 +60,12 @@ public class GraphicsRecorder {
         if (imageCount == 0) {
             //System.out.println("image count = 0 in graphicsRecorder");
             //Set up JavaCV frame recorder
-            recorder = new FFmpegFrameRecorder("Output.mp4",1920,1080);
-            // recorder.setVideoCodec(173);
+            recorder = new FFmpegFrameRecorder("VertexSeperates.mp4",3840,2160);
             // recorder.setPixelFormat();
             recorder.setFormat("mp4");
-            recorder.setVideoOption("crf", "0");
-
+            recorder.setVideoOption("crf", "18");
+            recorder.setVideoOption("preset", "veryslow");
+            recorder.setVideoBitrate(20000000);
             FFmpegLogCallback.set();
 
             converter = new Java2DFrameConverter();

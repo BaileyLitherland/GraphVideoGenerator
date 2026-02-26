@@ -36,7 +36,7 @@ public class LinearAnimation extends Animation {
             if (frameNum == startFrame) {
                 object.setPos(startPosition);
             }
-            if (frameNum > startFrame && frameNum < numFrames){
+            if (frameNum > startFrame && frameNum - startFrame < numFrames){
                 // System.out.println(object);
                 // System.out.println("End Frame: " + numFrames + " Current Frame: " + frameNum);
                 object.move(new Vector3d(deltaX, deltaY,0));
