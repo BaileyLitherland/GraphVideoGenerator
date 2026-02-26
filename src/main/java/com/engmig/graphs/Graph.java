@@ -6,8 +6,7 @@ import java.util.ArrayList;
 
 public abstract class Graph {
 
-    // Returns true is vertices x and y are adjacent
-    public abstract boolean isAdjacent(int x, int y);
+    public abstract boolean isAdjacent(int x, int y); // Returns true is vertices x and y are adjacent
 
     public abstract ArrayList<Vertex> getNeighbours(int x); // Returns a list of neighbouring vertices to vertex x
 

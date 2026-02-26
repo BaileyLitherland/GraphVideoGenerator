@@ -1,15 +1,16 @@
 package com.engmig;
 
-import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
+import javax.vecmath.Vector3d;
 import java.io.IOException;
 
 public class GraphicsController {
 
     private static GraphicsController graphicsController;
     private static GraphicsContext gc;
+    private static AnimationScheduler animationScheduler;
     private static boolean recording;
 
     private GraphicsRecorder recorder;
@@ -17,10 +18,12 @@ public class GraphicsController {
     public GraphicsController(GraphicsContext graphicContext){
          gc = graphicContext;
          recorder = new GraphicsRecorder();
+         animationScheduler = new AnimationScheduler();
     }
 
     public GraphicsController(){
         recorder = new GraphicsRecorder();
+        animationScheduler = new AnimationScheduler();
     }
     // Static Factory Method
     public static GraphicsController getInstance(){
@@ -30,7 +33,7 @@ public class GraphicsController {
         return graphicsController;
     }
 
-    public static GraphicsController newGraphicsHandler(GraphicsContext graphicsContext){
+    public static GraphicsController newGraphicsController(GraphicsContext graphicsContext){
         graphicsController = new GraphicsController(graphicsContext);
         return graphicsController;
     }
@@ -39,34 +42,47 @@ public class GraphicsController {
         return gc;
     }
     int count = 0;
-    public void update(){
-        // In here update the canvas based on the graph
-        gc.setFill(Color.web("#43434cff"));
-        gc.fillRect(0,0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
+    public void update() throws IOException {
 
-        gc.setFill(Color.web("#43434cff"));
-        Vertex vertex = new Vertex(3840/2,2160/2);
+
+        if (count == 0){
+
+            System.out.println("Create vectors in graphics controller");
+            Vertex v1 = new Vertex(gc.getCanvas().getWidth()/2,gc.getCanvas().getHeight()/2);
+            Vertex v2 = new Vertex(gc.getCanvas().getWidth()/2,gc.getCanvas().getHeight()/2);
+            Vector3d startPos = new Vector3d(gc.getCanvas().getWidth()/2,gc.getCanvas().getHeight()/2, 0 );
+            Vector3d endPosV1 = new Vector3d(gc.getCanvas().getWidth()/2 + 200,gc.getCanvas().getHeight()/2, 0 );
+            Vector3d endPosV2 = new Vector3d(gc.getCanvas().getWidth()/2 -200,gc.getCanvas().getHeight()/2, 0 );
+            animationScheduler.createLinearAnimation(v1, startPos, endPosV1, 40, 0);
+            animationScheduler.createLinearAnimation(v2, startPos, endPosV2, 40, 0);
+
+        }
+
+        // In here update the canvas based on the graph
+
+        gc.setFill(Color.web("#2B2B2B"));
+
+        Vertex vertex = new Vertex(gc.getCanvas().getWidth()/2,gc.getCanvas().getHeight()/2);
         // Here is where we could also start to take the snapshots of the canvas
-        gc.setFill(Color.DARKKHAKI);
-        vertex.draw(gc);
+        // vertex.draw(gc, count);
+
+        animationScheduler.update(gc);
+
+        count += 1;
+//        if (count == 90){
+//           recorder.stop();
+//       }
+//        if (count < 90){
+//            recorder.record(gc.getCanvas());
+//        }
+
 //        try {
-//            if (count < 1000){
-//                recorder.record(gc.getCanvas());
-//            }
+//
+//            recorder.screenShot(gc.getCanvas());
+//
 //        } catch (IOException e) {
 //            throw new RuntimeException(e);
 //        }
-        count += 1;
-//        if (count == 1000){
-//            recorder.stop();
-//        }
-        try {
-            if (count == 1) {
-                recorder.screenShot(gc.getCanvas());
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
 
     }
 

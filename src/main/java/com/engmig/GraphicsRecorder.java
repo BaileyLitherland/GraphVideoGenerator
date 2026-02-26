@@ -27,7 +27,7 @@ import static java.io.FileDescriptor.out;
 
 public class GraphicsRecorder {
 
-    boolean recording = true; // Make true when you decide to record again
+    boolean recording = false; // Make true when you decide to record again
 
     // FFmpeg recorder classes
     private FFmpegFrameRecorder recorder;
@@ -52,16 +52,20 @@ public class GraphicsRecorder {
 
     public void stop(){
         imageCount = 0;
-        recording = false;
+        //recording = false;
         finishRecording();
     }
     public void record(Canvas canvas) throws IOException {
 
         if (imageCount == 0) {
+            //System.out.println("image count = 0 in graphicsRecorder");
             //Set up JavaCV frame recorder
-            recorder = new FFmpegFrameRecorder("Output.mp4",3840,2160);
-            recorder.setVideoCodec(avcodec.AV_CODEC_ID_H264);
+            recorder = new FFmpegFrameRecorder("Output.mp4",1920,1080);
+            // recorder.setVideoCodec(173);
+            // recorder.setPixelFormat();
             recorder.setFormat("mp4");
+            recorder.setVideoOption("crf", "0");
+
             FFmpegLogCallback.set();
 
             converter = new Java2DFrameConverter();
