@@ -34,7 +34,7 @@ public class ScreenBuilder implements Builder<Region>{
         canvas.setWidth(3840);
         canvas.setHeight(2160);
 
-        canvas.getGraphicsContext2D().setFill(Color.web("#43434cff"));
+        canvas.getGraphicsContext2D().setFill(Color.web("#2B2B2B"));
         canvas.getGraphicsContext2D().fillRect(0,0, canvas.getWidth(), canvas.getHeight());
 
         this.canvas = canvas;

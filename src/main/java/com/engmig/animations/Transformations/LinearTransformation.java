@@ -1,12 +1,11 @@
-package com.engmig.animations;
+package com.engmig.animations.Transformations;
 
 import com.engmig.Drawable;
 import javafx.scene.canvas.GraphicsContext;
-import org.jcodec.common.DictionaryCompressor;
 
 import javax.vecmath.Vector3d;
 
-public class LinearAnimation extends Animation {
+public class LinearTransformation extends Transformation {
 
         // From the abstract animation class
         Drawable object;
@@ -20,7 +19,7 @@ public class LinearAnimation extends Animation {
         double deltaX;
         double deltaY;
 
-        public LinearAnimation(Drawable object, Vector3d startPosition, Vector3d endPosition, int numFrames, int startFrame){
+        public LinearTransformation(Drawable object, Vector3d startPosition, Vector3d endPosition, int numFrames, int startFrame){
             super(object,startPosition, endPosition, numFrames, startFrame);
             this.object = object;
             this.numFrames = numFrames;
@@ -31,7 +30,7 @@ public class LinearAnimation extends Animation {
         }
 
 
-    public void draw(GraphicsContext gc, int frameNum){
+    public void update(GraphicsContext gc, int frameNum){
 
             if (frameNum == startFrame) {
                 object.setPos(startPosition);
@@ -48,4 +47,12 @@ public class LinearAnimation extends Animation {
             }
 
         }
+
+    /**
+     * @return
+     */
+    @Override
+    public Drawable getObject() {
+       return object;
+    }
 }

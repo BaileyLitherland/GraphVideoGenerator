@@ -12,4 +12,7 @@ public interface Drawable {
 
     public void setPos(Vector3d pos);
 
+    public void setSize(double size);
+
+    public double getSize();
 }

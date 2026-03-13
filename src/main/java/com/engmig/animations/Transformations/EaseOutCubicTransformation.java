@@ -1,11 +1,11 @@
-package com.engmig.animations;
+package com.engmig.animations.Transformations;
 
 import com.engmig.Drawable;
 import javafx.scene.canvas.GraphicsContext;
 
 import javax.vecmath.Vector3d;
 
-public class EaseOutCubic extends Animation {
+public class EaseOutCubicTransformation extends Transformation {
     // From the abstract animation class
     Drawable object;
     Vector3d startPosition;
@@ -18,11 +18,12 @@ public class EaseOutCubic extends Animation {
     double deltaX;
     double deltaY;
 
-    public EaseOutCubic(Drawable object, Vector3d startPosition, Vector3d endPosition, int numFrames, int startFrame) {
+    public EaseOutCubicTransformation(Drawable object, Vector3d startPosition, Vector3d endPosition, int numFrames, int startFrame) {
         super(object, startPosition, endPosition, numFrames, startFrame);
         this.object = object;
         this.numFrames = numFrames;
         this.startFrame = startFrame;
+        this.startPosition = startPosition;
         deltaX = (startPosition.getX() - endPosition.getX());
         deltaY = (startPosition.getY() - endPosition.getY());
         //System.out.println(object + " " +  this.object);
@@ -31,23 +32,32 @@ public class EaseOutCubic extends Animation {
     private double easeOutCubic(double x){
         return 1 - Math.pow(1 - x, 3);
     }
-    public void draw(GraphicsContext gc, int frameNum){
+    public void update(GraphicsContext gc, int frameNum){
 
         if (frameNum == startFrame) {
+            //System.out.println("set pos");
+            //System.out.println("ease out cubic update, frame num, startFrame:" + frameNum + " " +startFrame);
             object.setPos(startPosition);
         }
         if (frameNum > startFrame && frameNum - startFrame < numFrames){
-
+            //System.out.println("ease out cubic update, frame num, startFrame:" + frameNum + " " +startFrame);
             object.move(new Vector3d(
                     deltaX * easeOutCubic((double) (frameNum-startFrame)/numFrames) - deltaX * easeOutCubic((double) (frameNum-startFrame - 1)/numFrames) ,
                     deltaY * easeOutCubic((double) (frameNum-startFrame)/numFrames) - deltaY * easeOutCubic((double) (frameNum-startFrame - 1)/numFrames) ,
                     0));
+        }
+
+        if (frameNum > startFrame){
             object.draw(gc,frameNum);
         }
 
-        if (frameNum > 0){
-            object.draw(gc,frameNum);
-        }
+    }
 
+    /**
+     * @return
+     */
+    @Override
+    public Drawable getObject() {
+       return object;
     }
 }

@@ -1,5 +1,6 @@
 package com.engmig;
 
+import com.engmig.animations.Scalers.EaseInOutQuinScaler;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
@@ -45,29 +46,23 @@ public class GraphicsController {
     public void update() throws IOException {
 
 
-        if (count == 10){
-
+        if (count == 0){
+            recorder.start(gc.getCanvas());
             System.out.println("Create vectors in graphics controller");
             Vertex v1 = new Vertex(gc.getCanvas().getWidth()/2,gc.getCanvas().getHeight()/2);
             Vertex v2 = new Vertex(gc.getCanvas().getWidth()/2,gc.getCanvas().getHeight()/2);
 
-            Vertex v3 = new Vertex(gc.getCanvas().getWidth()/2,gc.getCanvas().getHeight()/2 - 300);
-            Vertex v4 = new Vertex(gc.getCanvas().getWidth()/2,gc.getCanvas().getHeight()/2 - 300);
-
-            Vector3d startPos = new Vector3d(gc.getCanvas().getWidth()/2,gc.getCanvas().getHeight()/2, 0 );
-            Vector3d startPos2 = new Vector3d(gc.getCanvas().getWidth()/2,gc.getCanvas().getHeight()/2 - 300, 0 );
+            Vector3d startPos1 = new Vector3d(gc.getCanvas().getWidth()/2,gc.getCanvas().getHeight()/2, 0 );
+            Vector3d startPos2 = new Vector3d(gc.getCanvas().getWidth()/2,gc.getCanvas().getHeight()/2, 0 );
 
             Vector3d endPosV1 = new Vector3d(gc.getCanvas().getWidth()/2 + 500,gc.getCanvas().getHeight()/2, 0 );
-            Vector3d endPosV2 = new Vector3d(gc.getCanvas().getWidth()/2 -500,gc.getCanvas().getHeight()/2, 0 );
+            Vector3d endPosV2 = new Vector3d(gc.getCanvas().getWidth()/2 -500,gc.getCanvas().getHeight()/2+500, 0 );
 
-            Vector3d endPosV3 = new Vector3d(gc.getCanvas().getWidth()/2 + 500,gc.getCanvas().getHeight()/2 - 300, 0 );
-            Vector3d endPosV4 = new Vector3d(gc.getCanvas().getWidth()/2 -500,gc.getCanvas().getHeight()/2 - 300, 0 );
+            animationScheduler.addAnimation(new EaseInOutQuinScaler(v1,1,20,0,200));
+            animationScheduler.addAnimation(new EaseInOutQuinScaler(v2,1,20,0,200));
 
-
-            animationScheduler.createLinearAnimation(v1, startPos, endPosV1, 60, 10);
-            animationScheduler.createLinearAnimation(v2, startPos, endPosV2, 60, 10);
-            animationScheduler.createEaseOutAnimation(v3, startPos2, endPosV3, 60, 10);
-            animationScheduler.createEaseOutAnimation(v4, startPos2, endPosV4, 60, 10);
+            animationScheduler.createEaseOutAnimation(v1, startPos1, endPosV1, 60, 30);
+            animationScheduler.createEaseOutAnimation(v2, startPos2, endPosV2, 60, 30);
 
 
         }
@@ -83,10 +78,11 @@ public class GraphicsController {
         animationScheduler.update(gc);
 
         count += 1;
+        System.out.println(count);
         if (count == 90){
            recorder.stop();
        }
-        if (count < 90 && count >= 10){
+        if (count < 90 && count >= 0){
             recorder.record(gc.getCanvas());
         }
 
@@ -101,7 +97,7 @@ public class GraphicsController {
     }
 
     public void startRecording(){
-        recorder.start();
+        recorder.start(gc.getCanvas());
     }
 
     public void stopRecording(){

@@ -1,8 +1,8 @@
 package com.engmig;
 
 import com.engmig.animations.Animation;
-import com.engmig.animations.EaseOutCubic;
-import com.engmig.animations.LinearAnimation;
+import com.engmig.animations.Transformations.EaseOutCubicTransformation;
+import com.engmig.animations.Transformations.LinearTransformation;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
@@ -21,20 +21,22 @@ public class AnimationScheduler {
     // in any final product outside of video animations.
 
 
-    ArrayList<Animation> animations = new ArrayList<Animation>();
+    ArrayList<com.engmig.animations.Animation> animations = new ArrayList<Animation>();
     int frameCount = 0;
+    ArrayList<Drawable> objects = new ArrayList<Drawable>();
 
     public void addAnimation(Animation animation){
         animations.add(animation);
+        objects.add(animation.getObject());
     }
 
     public void createLinearAnimation(Drawable object, Vector3d startPosition, Vector3d endPosition, int numFrames, int startFrame){
-        LinearAnimation animation = new LinearAnimation(object,startPosition, endPosition, numFrames, startFrame);
+        LinearTransformation animation = new LinearTransformation(object,startPosition, endPosition, numFrames, startFrame);
         addAnimation(animation);
     }
 
     public void createEaseOutAnimation(Drawable object, Vector3d startPosition, Vector3d endPosition, int numFrames, int startFrame){
-        EaseOutCubic animation = new EaseOutCubic(object,startPosition, endPosition, numFrames, startFrame);
+        EaseOutCubicTransformation animation = new EaseOutCubicTransformation(object,startPosition, endPosition, numFrames, startFrame);
         addAnimation(animation);
     }
 
@@ -49,9 +51,12 @@ public class AnimationScheduler {
         frameCount += 1;
 
         if (!animations.isEmpty()) {
-            for (Animation animation : animations) {
+            for (Animation animations : animations) {
                 //System.out.println("drawing object in animation scheduler");
-                animation.draw(gc, frameCount);
+                animations.update(gc, frameCount);
+            }
+            for (Drawable drawable: objects){
+                drawable.draw(gc,frameCount);
             }
         }
     }
