@@ -2,7 +2,9 @@ package com.engmig.graphs;
 
 import com.engmig.Vertex;
 
+import javax.vecmath.Vector3d;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class AdjacencyList extends Graph{
 
@@ -98,5 +100,33 @@ public class AdjacencyList extends Graph{
     @Override
     public int getNumVertices() {
         return 0;
+    }
+
+    @Override
+    public ArrayList<ArrayList<Integer>> getEdges() {
+        return edges;
+    }
+
+    public void makeRndGraph(int numV, int numE){
+
+        Random random = new Random();
+        for(int i = 0; i < numV; i++ ){
+            addVertex();
+            Vertex v = getVertex(i);
+            v.setPos(new Vector3d(random.nextInt(3600)+ 120, random.nextInt(2000)+80, 0));
+        }
+        for(int i = 0; i < numE; i++ ){
+            int v1 = random.nextInt(numV);
+            int v2 = random.nextInt(numV);
+            if (v2 == v1){
+                if (v1 != numV -1 ){
+                    v1 =  v1 + 1;
+                }
+                else{
+                    v1 = v1 - 1;
+                }
+            }
+            addEdge(v1,v2,0);
+        }
     }
 }

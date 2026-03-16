@@ -33,11 +33,8 @@ public class Vertex implements Drawable {
         this.pos.add(moveVector);
     }
 
-
-
     @Override
     public void setPos(Vector3d pos) {
-        System.out.println("set pos pos:" + pos);
         this.pos = pos;
     }
 

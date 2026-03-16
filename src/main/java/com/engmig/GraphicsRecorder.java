@@ -1,225 +1,153 @@
 package com.engmig;
 
-import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.WritableImage;
+import org.bytedeco.ffmpeg.global.avcodec;
 import org.bytedeco.ffmpeg.global.avutil;
 import org.bytedeco.javacv.FFmpegFrameRecorder;
 import org.bytedeco.javacv.FFmpegLogCallback;
 import org.bytedeco.javacv.Frame;
-import org.bytedeco.javacv.OpenCVFrameConverter;
-import org.bytedeco.opencv.opencv_core.Mat;
+import org.bytedeco.javacv.Java2DFrameConverter;
+import org.jcodec.api.awt.AWTSequenceEncoder;
+import org.jcodec.common.model.Rational;
+import org.jetbrains.annotations.NotNull;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
 import java.io.File;
 import java.io.IOException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import java.nio.ShortBuffer;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
 
-import static org.bytedeco.opencv.global.opencv_core.CV_8UC3;
-import static org.bytedeco.opencv.global.opencv_core.flip;
+import static java.io.FileDescriptor.out;
 
 public class GraphicsRecorder {
 
-    private volatile boolean recording = false;
+    boolean recording = true; // Make true when you decide to record again
 
+    // FFmpeg recorder classes
     private FFmpegFrameRecorder recorder;
-    private final OpenCVFrameConverter.ToMat converter = new OpenCVFrameConverter.ToMat();
+    private Java2DFrameConverter converter;
 
-    private ExecutorService encoderExecutor;
+    private static final File TEMP_DIRECTORY = new File(System.getProperty("java.io.tmpdir"));
 
-    private long startTime;
-    private long endTime;
-    private int width;
-    private int height;
-    private double frameRate = 30.0;
-    private String outputFile = "VertexSeperates2.mp4";
+    int imageCount = 0;
+    List<BufferedImage> images = new ArrayList<BufferedImage>();
 
-    public GraphicsRecorder() {
+    // Variables for timing things
+    long startTime;
+    long endTime;
+
+    public GraphicsRecorder(){
+
     }
 
-    public void setOutputFile(String outputFile) {
-        this.outputFile = outputFile;
+    public void start(){
+
     }
 
-    public void setFrameRate(double frameRate) {
-        this.frameRate = frameRate;
+    public void stop(){
+        imageCount = 0;
+        //recording = false;
+        finishRecording();
     }
+    public void record(Canvas canvas) throws IOException {
 
-    public void start(Canvas canvas) {
-        if (recording) {return;}
-        System.out.println("Im here");
+        if (imageCount == 0) {
+            //System.out.println("image count = 0 in graphicsRecorder");
+            //Set up JavaCV frame recorder
+            recorder = new FFmpegFrameRecorder("randomGraph.mp4",3840,2160);
+            // recorder.setPixelFormat();
+            recorder.setFormat("mp4");
+            recorder.setVideoOption("crf", "18");
+            recorder.setVideoOption("preset", "veryslow");
+            recorder.setVideoBitrate(20000000);
+            recorder.setAudioChannels(1);
+            recorder.setAudioCodec(avcodec.AV_CODEC_ID_AAC);
+            FFmpegLogCallback.set();
 
-        this.width = (int) canvas.getWidth();
-        this.height = (int) canvas.getHeight();
-
-        recorder = new FFmpegFrameRecorder(outputFile, width, height);
-        recorder.setVideoCodecName("h264_nvenc");
-        recorder.setPixelFormat(avutil.AV_PIX_FMT_YUV420P);
-        recorder.setFrameRate(frameRate);
-        recorder.setVideoOption("vsync", "cfr");
-        recorder.setVideoOption("preset", "p5");
-        recorder.setVideoOption("rc", "vbr");
-        recorder.setVideoOption("cq", "19");
-        recorder.setVideoBitrate(20_000_000);
-
-        FFmpegLogCallback.set();
-
-        encoderExecutor = Executors.newSingleThreadExecutor();
-
-        try {
-            recorder.start();
-            System.out.println("SET RECORDING TO TRUE");
-            recording = true;
-            startTime = System.currentTimeMillis();
-            System.out.println("Recording started");
-        } catch (Exception e) {
-            e.printStackTrace();
-            recording = false;
-        }
-    }
-
-    public void record(Canvas canvas) {
-        System.out.println("Recording is: " + recording);
-        if (!recording) return;
-
-        // MUST be called on JavaFX thread, but we’ll be defensive:
-        if (!Platform.isFxApplicationThread()) {
-            Platform.runLater(() -> record(canvas));
-            return;
-        }
-
-        WritableImage snapshot = canvas.snapshot(null, null);
-
-        encoderExecutor.submit(() -> processFrame(snapshot));
-    }
-
-    private void processFrame(WritableImage snapshot) {
-        try {
-            BufferedImage fxImg = SwingFXUtils.fromFXImage(snapshot, null);
-
-            BufferedImage bgr = new BufferedImage(
-                    fxImg.getWidth(),
-                    fxImg.getHeight(),
-                    BufferedImage.TYPE_3BYTE_BGR
-            );
-
-            Graphics2D g = bgr.createGraphics();
-            g.drawImage(fxImg, 0, 0, null);
-            g.dispose();
-
-            Mat mat = bufferedImageToMat(bgr);
-
-
-
-            Frame frame = converter.convert(mat);
-            recorder.record(frame);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private Mat fxToMat(WritableImage img) {
-        int w = (int) img.getWidth();
-        int h = (int) img.getHeight();
-
-        Mat mat = new Mat(h, w, CV_8UC3);
-
-        byte[] buffer = new byte[w * h * 3];
-
-        img.getPixelReader().getPixels(
-                0, 0, w, h,
-                javafx.scene.image.PixelFormat.getByteBgraInstance(),
-                buffer, 0, w * 4
-        );
-
-        // Convert BGRA → BGR in-place
-        for (int i = 0, j = 0; i < buffer.length; i += 4, j += 3) {
-            byte b = buffer[i];
-            byte g = buffer[i + 1];
-            byte r = buffer[i + 2];
-            buffer[j]     = b;
-            buffer[j + 1] = g;
-            buffer[j + 2] = r;
-        }
-
-        mat.data().put(buffer);
-        return mat;
-    }
-
-
-    private Mat bufferedImageToMat(BufferedImage bi) {
-        Mat mat = new Mat(bi.getHeight(), bi.getWidth(), CV_8UC3);
-        byte[] data = ((DataBufferByte) bi.getRaster().getDataBuffer()).getData();
-        mat.data().put(data);
-        return mat;
-    }
-
-    public synchronized void stop() {
-        if (!recording) {
-            System.out.println("Already stopped");
-            return;
-        }
-
-        recording = false;
-
-        try {
-            if (encoderExecutor != null) {
-                encoderExecutor.shutdown();
-                if (!encoderExecutor.awaitTermination(3, TimeUnit.SECONDS)) {
-                    encoderExecutor.shutdownNow();
-                }
+            converter = new Java2DFrameConverter();
+            if(recording  == true){
+                System.out.println("start recording");
+                startTime = System.currentTimeMillis();
+                recorder.start();
             }
+        }
 
-            if (recorder != null) {
-                System.out.println("Stopping recorder...");
-                recorder.stop();
-                recorder.release();
-            } else {
-                System.out.println("Recorder was null!");
-            }
+        WritableImage canvasSnapshot = canvas.snapshot(null,null);
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            encoderExecutor = null;
-            recorder = null;
+        BufferedImage bimg = SwingFXUtils.fromFXImage(canvasSnapshot, null);
+        //images.add(bimg);
+        // Convert to the right RBG format
+        BufferedImage bimgEdited = new BufferedImage(bimg.getWidth(),bimg.getHeight(),BufferedImage.TYPE_3BYTE_BGR);
+        bimgEdited.getGraphics().drawImage(bimg, 0, 0, null);
+        Frame frame = converter.getFrame(bimgEdited);
+
+        recorder.record(frame);
+
+        imageCount += 1;
+
+    }
+
+    public void recordSound(ShortBuffer samples){
+        try {
+            recorder.recordSamples(samples);
+        } catch (FFmpegFrameRecorder.Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
-    public void screenShot(Canvas canvas) throws IOException {
-        if (!Platform.isFxApplicationThread()) {
-            Platform.runLater(() -> {
-                try {
-                    screenShot(canvas);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
-            return;
+
+    public void finishRecording(){
+        endTime = System.currentTimeMillis();
+        double recordingTime = (endTime - startTime)/1000.00;
+
+        System.out.println("video took " + recordingTime +"seconds to finish");
+        System.out.println("now saving video");
+        startTime = System.currentTimeMillis();
+
+        try {
+//            for (BufferedImage bimg: images){
+//                BufferedImage bimgEdited = new BufferedImage(bimg.getWidth(),bimg.getHeight(),BufferedImage.TYPE_3BYTE_BGR);
+//                bimgEdited.getGraphics().drawImage(bimg, 0, 0, null);
+//                Frame frame = converter.getFrame(bimgEdited);
+//            }
+
+            recorder.stop();
+            recorder.release();
+            endTime = System.currentTimeMillis();
+            System.out.println("finish video");
+            recordingTime = (endTime - startTime)/1000.00;
+            System.out.println("encoding video took " + recordingTime +"seconds to finish");
+            //Process process = new ProcessBuilder("ffmpeg", "-f", "image2", "-i","image%d.png", "-pix_fmt", "yuv420p", "a.mp4").start();
+        } catch (IOException e) {
+            //throw new RuntimeException(e);
         }
 
-        WritableImage snapshot = canvas.snapshot(null, null);
-        BufferedImage fxImg = SwingFXUtils.fromFXImage(snapshot, null);
+    }
 
-        BufferedImage bgr = new BufferedImage(
-                fxImg.getWidth(),
-                fxImg.getHeight(),
-                BufferedImage.TYPE_3BYTE_BGR
-        );
 
-        Graphics2D g = bgr.createGraphics();
-        g.drawImage(fxImg, 0, 0, null);
-        g.dispose();
-
+    public void screenShot(Canvas canvas) throws IOException{
+        WritableImage canvasSnapshot = canvas.snapshot(null,null);
+        BufferedImage bimg = SwingFXUtils.fromFXImage(canvasSnapshot, null);
+        BufferedImage bimgEdited = new BufferedImage(bimg.getWidth(),bimg.getHeight(),BufferedImage.TYPE_3BYTE_BGR);
+        bimgEdited.getGraphics().drawImage(bimg, 0, 0, null);
         File outputFile = new File("Image01.png");
-        ImageIO.write(bgr, "png", outputFile);
-        System.out.println("Screenshot taken");
+        ImageIO.write(bimgEdited, "png", outputFile);
+        System.out.println("Screen shot taken");
     }
+
+
+
+    public void createMP4(){
+        // This method will take the files saved in record and turn them into an MP4
+        // Using JCodec to encode the pngs to MP4 aznd save as unique file.
+        // Consider using an array of buffered images rather than save them
+    }
+
 }

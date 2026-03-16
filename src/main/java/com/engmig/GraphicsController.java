@@ -1,11 +1,16 @@
 package com.engmig;
 
+import com.engmig.animations.Animation;
 import com.engmig.animations.Scalers.EaseInOutQuinScaler;
+import com.engmig.animations.Transformations.LinearTransformation;
+import com.engmig.graphs.AdjacencyList;
+import com.engmig.graphs.Graph;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 import javax.vecmath.Vector3d;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class GraphicsController {
 
@@ -13,6 +18,7 @@ public class GraphicsController {
     private static GraphicsContext gc;
     private static AnimationScheduler animationScheduler;
     private static boolean recording;
+    private AdjacencyList graph;
 
     private GraphicsRecorder recorder;
 
@@ -47,25 +53,41 @@ public class GraphicsController {
 
 
         if (count == 0){
-            recorder.start(gc.getCanvas());
-            System.out.println("Create vectors in graphics controller");
-            Vertex v1 = new Vertex(gc.getCanvas().getWidth()/2,gc.getCanvas().getHeight()/2);
-            Vertex v2 = new Vertex(gc.getCanvas().getWidth()/2,gc.getCanvas().getHeight()/2);
+            recorder.start();
+            graph = new AdjacencyList();
+            graph.makeRndGraph(10,20);
+            ArrayList<Animation> edgesAnimations = new ArrayList<Animation>();
+            ArrayList<Animation> verticesAnimations = new ArrayList<Animation>();
+            ArrayList<Vertex> vertices = graph.getVertices();
+            ArrayList<ArrayList<Integer>> edges = graph.getEdges();
+            int vNum = 0;
+            for(Vertex v: vertices) {
+                Animation scaler = new EaseInOutQuinScaler(v,count+(vNum*10),15,0,50);
 
-            Vector3d startPos1 = new Vector3d(gc.getCanvas().getWidth()/2,gc.getCanvas().getHeight()/2, 0 );
-            Vector3d startPos2 = new Vector3d(gc.getCanvas().getWidth()/2,gc.getCanvas().getHeight()/2, 0 );
 
-            Vector3d endPosV1 = new Vector3d(gc.getCanvas().getWidth()/2 + 500,gc.getCanvas().getHeight()/2, 0 );
-            Vector3d endPosV2 = new Vector3d(gc.getCanvas().getWidth()/2 -500,gc.getCanvas().getHeight()/2+500, 0 );
+                ArrayList<Vertex> neighbours = graph.getNeighbours(vNum);
+                for(Vertex n: neighbours){
+                    if (graph.getVertexIndex(n) < vNum){
+                        Animation linearTransform = new LinearTransformation(new EdgeLine(v.pos.x, v.pos.y, v.pos.x, v.pos.y),v.pos,n.pos,7, count+(vNum*10)+10);
+                        System.out.println("npos:" + n.pos + "v pos: " + v.pos);
+                        edgesAnimations.add(linearTransform);
+                    }
+                }
+                verticesAnimations.add(scaler);
+                //animationScheduler.addAnimation(scaler);
 
-            animationScheduler.addAnimation(new EaseInOutQuinScaler(v1,1,20,0,200));
-            animationScheduler.addAnimation(new EaseInOutQuinScaler(v2,1,20,0,200));
+                vNum += 1;
+            }
 
-            animationScheduler.createEaseOutAnimation(v1, startPos1, endPosV1, 60, 30);
-            animationScheduler.createEaseOutAnimation(v2, startPos2, endPosV2, 60, 30);
-
+            for(Animation e: edgesAnimations){
+                animationScheduler.addAnimation(e);
+            }
+            for(Animation v: verticesAnimations){
+                animationScheduler.addAnimation(v);
+            }
 
         }
+
 
         // In here update the canvas based on the graph
 
@@ -78,11 +100,10 @@ public class GraphicsController {
         animationScheduler.update(gc);
 
         count += 1;
-        System.out.println(count);
-        if (count == 90){
+        if (count == 120){
            recorder.stop();
        }
-        if (count < 90 && count >= 0){
+        if (count < 120 && count >= 0){
             recorder.record(gc.getCanvas());
         }
 
@@ -97,7 +118,7 @@ public class GraphicsController {
     }
 
     public void startRecording(){
-        recorder.start(gc.getCanvas());
+        recorder.start();
     }
 
     public void stopRecording(){
