@@ -8,7 +8,7 @@ import org.jcodec.scale.ColorUtil;
 import javax.vecmath.Vector3d;
 public class Vertex implements Drawable {
     Vector3d pos;
-    double radius = 0;
+    double radius = 50;
     Color colour = Color.DARKKHAKI;
 
     public Vertex(double x, double y){
@@ -20,7 +20,7 @@ public class Vertex implements Drawable {
     }
 
     public void draw(GraphicsContext gc, int frameNum){
-        gc.setFill(colour)  ;
+        gc.setFill(colour);
         gc.fillOval(pos.getX()-radius/2, pos.getY()-radius/2, radius,radius);
 
     }
@@ -38,7 +38,9 @@ public class Vertex implements Drawable {
         this.pos = pos;
     }
 
-
+    public Vector3d getPos(){
+        return pos;
+    }
 
 
     public double getSize(){

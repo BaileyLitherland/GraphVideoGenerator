@@ -1,13 +1,17 @@
 package com.engmig;
 
 import com.engmig.animations.Animation;
+import com.engmig.animations.NoAnimation;
+import com.engmig.animations.Scalers.EaseInOutQuinScaler;
 import com.engmig.animations.Transformations.EaseOutCubicTransformation;
 import com.engmig.animations.Transformations.LinearTransformation;
+import com.engmig.graphs.Graph;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 import javax.vecmath.Vector3d;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class AnimationScheduler {
     // The intent of this class is to store a set of object
@@ -59,6 +63,76 @@ public class AnimationScheduler {
                 drawable.draw(gc,frameCount);
             }
         }
+    }
+
+    public void makeGraphAppear(Graph graph){
+        ArrayList<Animation> edgesAnimations = new ArrayList<Animation>();
+        ArrayList<Animation> verticesAnimations = new ArrayList<Animation>();
+        ArrayList<Vertex> vertices = graph.getVertices();
+        ArrayList<ArrayList<Integer>> edges = graph.getEdges();
+        int vNum = 0;
+        int count = 0;
+        for(Vertex v: vertices) {
+            Animation scaler = new EaseInOutQuinScaler(v,count+(vNum*1),10,0,50);
+
+
+            ArrayList<Vertex> neighbours = graph.getNeighbours(vNum);
+            for(Vertex n: neighbours){
+                if (graph.getVertexIndex(n) < vNum){
+                    Animation linearTransform = new LinearTransformation(new EdgeLine(v.pos.x, v.pos.y, v.pos.x, v.pos.y),v.pos,n.pos,10, count+(vNum*1)+1);
+                    //System.out.println("npos:" + n.pos + "v pos: " + v.pos);
+                    edgesAnimations.add(linearTransform);
+                }
+            }
+            verticesAnimations.add(scaler);
+            //animationScheduler.addAnimation(scaler);
+
+            vNum += 1;
+        }
+
+        for(Animation e: edgesAnimations){
+            addAnimation(e);
+        }
+        for(Animation v: verticesAnimations){
+            addAnimation(v);
+            System.out.println("adding animation");
+        }
+
+    }
+
+    public void drawGraph(Graph graph){
+        animations.clear();
+        objects.clear();
+        //System.out.println(animations);
+        ArrayList<Animation> edgesAnimations = new ArrayList<Animation>();
+        ArrayList<Animation> verticesAnimations = new ArrayList<Animation>();
+        ArrayList<Vertex> vertices = graph.getVertices();
+        int vNum = 0;
+        for(Vertex v: vertices) {
+            Animation noAniV = new NoAnimation(v);
+
+
+            ArrayList<Vertex> neighbours = graph.getNeighbours(vNum);
+            for(Vertex n: neighbours){
+                if (graph.getVertexIndex(n) < vNum){
+                    System.out.println(v.getPos() + " " + n.getPos());
+
+                    Animation noAniE = new NoAnimation(new EdgeLine(v.pos.x, v.pos.y, n.pos.x, n.pos.y));
+                    edgesAnimations.add(noAniE);
+                }
+            }
+            verticesAnimations.add(noAniV);
+
+            vNum += 1;
+        }
+
+        for(Animation e: edgesAnimations){
+            addAnimation(e);
+        }
+        for(Animation v: verticesAnimations){
+            addAnimation(v);
+        }
+        System.out.println(animations.size());
     }
 
 

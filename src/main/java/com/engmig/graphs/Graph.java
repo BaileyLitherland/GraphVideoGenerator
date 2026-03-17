@@ -11,6 +11,8 @@ public abstract class Graph {
 
     public abstract ArrayList<Vertex> getNeighbours(int x); // Returns a list of neighbouring vertices to vertex x
 
+    public abstract ArrayList<Vertex> getNeighbours(Vertex x); // Returns a list of neighbouring vertices to vertex x
+
     public abstract Vertex addVertex(); // Adds a new vertex of degree 0 to the graph
 
     public abstract void removeVertex(int x); // Removes vertex at index x from graph and it's edges
@@ -22,6 +24,7 @@ public abstract class Graph {
     public abstract Vertex getVertex(int x); // Gets vertex at index x
 
     public abstract int getVertexIndex(Vertex vertex); // Gets index of a vertex
+
 
     public abstract ArrayList<Vertex> getVertices(); // Gets all vertices
 

@@ -11,6 +11,7 @@ import org.bytedeco.javacv.FFmpegLogCallback;
 import org.bytedeco.javacv.Frame;
 import org.bytedeco.javacv.Java2DFrameConverter;
 import org.jcodec.api.awt.AWTSequenceEncoder;
+import org.jcodec.common.AudioUtil;
 import org.jcodec.common.model.Rational;
 import org.jetbrains.annotations.NotNull;
 
@@ -22,7 +23,9 @@ import java.nio.ShortBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import org.bytedeco.javacv.*;
+import java.nio.ShortBuffer;
+
 
 import static java.io.FileDescriptor.out;
 
@@ -37,7 +40,7 @@ public class GraphicsRecorder {
     private static final File TEMP_DIRECTORY = new File(System.getProperty("java.io.tmpdir"));
 
     int imageCount = 0;
-    List<BufferedImage> images = new ArrayList<BufferedImage>();
+    //List<BufferedImage> images = new ArrayList<BufferedImage>();
 
     // Variables for timing things
     long startTime;
@@ -61,14 +64,14 @@ public class GraphicsRecorder {
         if (imageCount == 0) {
             //System.out.println("image count = 0 in graphicsRecorder");
             //Set up JavaCV frame recorder
-            recorder = new FFmpegFrameRecorder("randomGraph.mp4",3840,2160);
+            recorder = new FFmpegFrameRecorder("NaiveFDGNoRepeling15v35e.mp4",3840,2160);
             // recorder.setPixelFormat();
             recorder.setFormat("mp4");
             recorder.setVideoOption("crf", "18");
             recorder.setVideoOption("preset", "veryslow");
             recorder.setVideoBitrate(20000000);
-            recorder.setAudioChannels(1);
-            recorder.setAudioCodec(avcodec.AV_CODEC_ID_AAC);
+//            recorder.setAudioChannels(1);
+//            recorder.setAudioCodec(avcodec.AV_CODEC_ID_AAC);
             FFmpegLogCallback.set();
 
             converter = new Java2DFrameConverter();
@@ -94,9 +97,9 @@ public class GraphicsRecorder {
 
     }
 
-    public void recordSound(ShortBuffer samples){
+    public void recordSound(){
         try {
-            recorder.recordSamples(samples);
+            recorder.recordSamples();
         } catch (FFmpegFrameRecorder.Exception e) {
             throw new RuntimeException(e);
         }

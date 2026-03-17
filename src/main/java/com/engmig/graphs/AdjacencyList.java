@@ -33,6 +33,11 @@ public class AdjacencyList extends Graph{
         return rtnArray;
     }
 
+    @Override
+    public ArrayList<Vertex> getNeighbours(Vertex x) {
+        return getNeighbours(getVertexIndex(x));
+    }
+
     /**
      * @return
      */

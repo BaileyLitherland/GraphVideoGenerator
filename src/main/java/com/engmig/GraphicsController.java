@@ -1,5 +1,6 @@
 package com.engmig;
 
+import com.engmig.FDGSolvers.NaiveFDG;
 import com.engmig.animations.Animation;
 import com.engmig.animations.Scalers.EaseInOutQuinScaler;
 import com.engmig.animations.Transformations.LinearTransformation;
@@ -17,6 +18,7 @@ public class GraphicsController {
     private static GraphicsController graphicsController;
     private static GraphicsContext gc;
     private static AnimationScheduler animationScheduler;
+    private static NaiveFDG naiveFDG;
     private static boolean recording;
     private AdjacencyList graph;
 
@@ -51,60 +53,34 @@ public class GraphicsController {
     int count = 0;
     public void update() throws IOException {
 
-
         if (count == 0){
             recorder.start();
             graph = new AdjacencyList();
-            graph.makeRndGraph(10,20);
-            ArrayList<Animation> edgesAnimations = new ArrayList<Animation>();
-            ArrayList<Animation> verticesAnimations = new ArrayList<Animation>();
-            ArrayList<Vertex> vertices = graph.getVertices();
-            ArrayList<ArrayList<Integer>> edges = graph.getEdges();
-            int vNum = 0;
-            for(Vertex v: vertices) {
-                Animation scaler = new EaseInOutQuinScaler(v,count+(vNum*10),15,0,50);
-
-
-                ArrayList<Vertex> neighbours = graph.getNeighbours(vNum);
-                for(Vertex n: neighbours){
-                    if (graph.getVertexIndex(n) < vNum){
-                        Animation linearTransform = new LinearTransformation(new EdgeLine(v.pos.x, v.pos.y, v.pos.x, v.pos.y),v.pos,n.pos,7, count+(vNum*10)+10);
-                        System.out.println("npos:" + n.pos + "v pos: " + v.pos);
-                        edgesAnimations.add(linearTransform);
-                    }
-                }
-                verticesAnimations.add(scaler);
-                //animationScheduler.addAnimation(scaler);
-
-                vNum += 1;
-            }
-
-            for(Animation e: edgesAnimations){
-                animationScheduler.addAnimation(e);
-            }
-            for(Animation v: verticesAnimations){
-                animationScheduler.addAnimation(v);
-            }
+            graph.makeRndGraph(15,30);
+            animationScheduler.makeGraphAppear(graph);
+            naiveFDG = new NaiveFDG(graph);
 
         }
-
 
         // In here update the canvas based on the graph
 
         gc.setFill(Color.web("#2B2B2B"));
 
-//        Vertex vertex = new Vertex(gc.getCanvas().getWidth()/2,gc.getCanvas().getHeight()/2);
-        // Here is where we could also start to take the snapshots of the canvas
-        // vertex.draw(gc, count);
-
         animationScheduler.update(gc);
 
         count += 1;
-        if (count == 120){
+        if (count == 200){
            recorder.stop();
        }
-        if (count < 120 && count >= 0){
+        if (count < 200 && count >= 0){
+            animationScheduler.drawGraph(graph);
+            if (count > 40){
+                //System.out.println("hereballs");
+                //animationScheduler.drawGraph(graph);
+                naiveFDG.update();
+            }
             recorder.record(gc.getCanvas());
+
         }
 
 //        try {
