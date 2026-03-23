@@ -104,7 +104,7 @@ public class AdjacencyList extends Graph{
 
     @Override
     public int getNumVertices() {
-        return 0;
+        return vertices.size();
     }
 
     @Override

@@ -132,7 +132,7 @@ public class AnimationScheduler {
         for(Animation v: verticesAnimations){
             addAnimation(v);
         }
-        System.out.println(animations.size());
+        //System.out.println(animations.size());
     }
 
 

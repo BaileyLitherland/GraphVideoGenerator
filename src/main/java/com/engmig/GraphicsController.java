@@ -1,5 +1,6 @@
 package com.engmig;
 
+import com.engmig.FDGSolvers.FruchReinFDG;
 import com.engmig.FDGSolvers.NaiveFDG;
 import com.engmig.animations.Animation;
 import com.engmig.animations.Scalers.EaseInOutQuinScaler;
@@ -18,7 +19,7 @@ public class GraphicsController {
     private static GraphicsController graphicsController;
     private static GraphicsContext gc;
     private static AnimationScheduler animationScheduler;
-    private static NaiveFDG naiveFDG;
+    private static FruchReinFDG FDG;
     private static boolean recording;
     private AdjacencyList graph;
 
@@ -54,11 +55,11 @@ public class GraphicsController {
     public void update() throws IOException {
 
         if (count == 0){
-            recorder.start();
+            //recorder.start();
             graph = new AdjacencyList();
-            graph.makeRndGraph(15,30);
+            graph.makeRndGraph(2,0);
             animationScheduler.makeGraphAppear(graph);
-            naiveFDG = new NaiveFDG(graph);
+            FDG = new FruchReinFDG(graph);
 
         }
 
@@ -73,11 +74,10 @@ public class GraphicsController {
            recorder.stop();
        }
         if (count < 200 && count >= 0){
-            animationScheduler.drawGraph(graph);
-            if (count > 40){
-                //System.out.println("hereballs");
-                //animationScheduler.drawGraph(graph);
-                naiveFDG.update();
+            //animationScheduler.drawGraph(graph);
+            if (count > 20){
+                animationScheduler.drawGraph(graph);
+                FDG.update();
             }
             recorder.record(gc.getCanvas());
 

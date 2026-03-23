@@ -31,7 +31,7 @@ import static java.io.FileDescriptor.out;
 
 public class GraphicsRecorder {
 
-    boolean recording = true; // Make true when you decide to record again
+    boolean recording = true;
 
     // FFmpeg recorder classes
     private FFmpegFrameRecorder recorder;
@@ -64,7 +64,7 @@ public class GraphicsRecorder {
         if (imageCount == 0) {
             //System.out.println("image count = 0 in graphicsRecorder");
             //Set up JavaCV frame recorder
-            recorder = new FFmpegFrameRecorder("NaiveFDGNoRepeling15v35e.mp4",3840,2160);
+            recorder = new FFmpegFrameRecorder("FrunchReinFDG15v35e.mp4",3840,2160);
             // recorder.setPixelFormat();
             recorder.setFormat("mp4");
             recorder.setVideoOption("crf", "18");
