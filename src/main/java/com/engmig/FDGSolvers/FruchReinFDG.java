@@ -15,9 +15,12 @@ public class FruchReinFDG {
 
     public FruchReinFDG(Graph graph){
         this.graph = graph;
-        targetDistance = Math.sqrt(7_200_000/graph.getNumVertices());
+        targetDistance = Math.sqrt(7200000/graph.getNumVertices());
         System.out.println(targetDistance);
+
     }
+
+
 
     public void update(){
         for (Vertex v: graph.getVertices()){
@@ -38,13 +41,17 @@ public class FruchReinFDG {
     private Vector3d attractiveForce(Vertex v, Vertex u){
         Vector3d forceVector = new Vector3d();
         forceVector.sub(u.getPos(),v.getPos());
-
+        //System.out.println("U: " + u.getPos() + " V:" + v.getPos());
         Double length = forceVector.length();
-
+        //System.out.println("Length:" + forceVector.length());
+        //System.out.println("Force Vector: " + forceVector);
         forceVector.normalize();
-        forceVector.scale(1/((length*length)/targetDistance));
-        System.out.println("Length:" + (length*length));
-        System.out.println("target:" + targetDistance);
+        //System.out.println("Normalised Force Vector: " + forceVector);
+        //System.out.println("(length*length)/targetDistance: " + (length*length)/targetDistance);
+        forceVector.scale((length*length)/targetDistance);
+        //System.out.println("final force Vector: " + forceVector);
+        //System.out.println("Length:" + (length*length));
+        //System.out.println("target:" + targetDistance);
 
         return forceVector;
     }
@@ -54,7 +61,7 @@ public class FruchReinFDG {
         forceVector.sub(u.getPos(),v.getPos());
 
         Double length = forceVector.length();
-        System.out.println("Length:" + length);
+        System.out.println("Repel");
         forceVector.normalize();
         forceVector.scale((-targetDistance*targetDistance / length));
 

@@ -57,7 +57,7 @@ public class GraphicsController {
         if (count == 0){
             //recorder.start();
             graph = new AdjacencyList();
-            graph.makeRndGraph(2,0);
+            graph.makeRndGraph(3,2);
             animationScheduler.makeGraphAppear(graph);
             FDG = new FruchReinFDG(graph);
 
