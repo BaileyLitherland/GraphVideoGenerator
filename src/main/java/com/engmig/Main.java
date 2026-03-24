@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -20,11 +21,15 @@ public class Main extends Application {
         Region screenRoot = screenBuilder.build();
         Scene scene = new Scene(screenRoot);
 
-        graphicsController = GraphicsController.newGraphicsHandler(screenBuilder.getCanvas().getGraphicsContext2D());
+        System.out.println("We have built the scene");
+
+        graphicsController = GraphicsController.newGraphicsController(screenBuilder.getCanvas().getGraphicsContext2D());
+
+        System.out.println("graphics Controller Initalised");
 
         primaryStage.setScene(scene);
         primaryStage.show();
-
+        System.out.println("We get to the show part");
         startTimer();
     }
 
@@ -38,7 +43,11 @@ public class Main extends Application {
 
                 Platform.runLater(() ->{
                     // This runs on Application Thread. Use to update UI
-                    graphicsController.update();
+                    try {
+                        graphicsController.update();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
 
                 });
             }

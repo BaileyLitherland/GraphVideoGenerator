@@ -20,7 +20,7 @@ public class ScreenBuilder implements Builder<Region>{
 
         BorderPane results = new BorderPane();
         Node canvas = createCanvas();
-        results.setCenter(canvas);
+        //results.setCenter(canvas);
 
         return results;
     }
@@ -28,12 +28,15 @@ public class ScreenBuilder implements Builder<Region>{
 
     private Node createCanvas(){
         Canvas canvas = new Canvas();
-        canvas.setWidth(2560);
-        canvas.setHeight(1440);
+//        canvas.setWidth(3840);
+//        canvas.setHeight(2160);
 
-        canvas.getGraphicsContext2D().setFill(Color.web("#43434cff"));
+        canvas.setWidth(3840);
+        canvas.setHeight(2160);
+
+        canvas.getGraphicsContext2D().setFill(Color.web("#2B2B2B"));
         canvas.getGraphicsContext2D().fillRect(0,0, canvas.getWidth(), canvas.getHeight());
-        canvas.getGraphicsContext2D().setFill(Color.web("#cede85ff"));
+
         this.canvas = canvas;
         return canvas;
     }

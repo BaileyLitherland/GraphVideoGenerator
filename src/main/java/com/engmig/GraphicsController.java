@@ -1,23 +1,39 @@
 package com.engmig;
 
+import com.engmig.FDGSolvers.FruchReinFDG;
+import com.engmig.FDGSolvers.NaiveFDG;
+import com.engmig.animations.Animation;
+import com.engmig.animations.Scalers.EaseInOutQuinScaler;
+import com.engmig.animations.Transformations.LinearTransformation;
+import com.engmig.graphs.AdjacencyList;
+import com.engmig.graphs.Graph;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+
+import javax.vecmath.Vector3d;
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class GraphicsController {
 
     private static GraphicsController graphicsController;
     private static GraphicsContext gc;
+    private static AnimationScheduler animationScheduler;
+    private static FruchReinFDG FDG;
     private static boolean recording;
+    private AdjacencyList graph;
 
     private GraphicsRecorder recorder;
 
     public GraphicsController(GraphicsContext graphicContext){
          gc = graphicContext;
          recorder = new GraphicsRecorder();
+         animationScheduler = new AnimationScheduler();
     }
 
     public GraphicsController(){
         recorder = new GraphicsRecorder();
+        animationScheduler = new AnimationScheduler();
     }
     // Static Factory Method
     public static GraphicsController getInstance(){
@@ -27,7 +43,7 @@ public class GraphicsController {
         return graphicsController;
     }
 
-    public static GraphicsController newGraphicsHandler(GraphicsContext graphicsContext){
+    public static GraphicsController newGraphicsController(GraphicsContext graphicsContext){
         graphicsController = new GraphicsController(graphicsContext);
         return graphicsController;
     }
@@ -36,19 +52,43 @@ public class GraphicsController {
         return gc;
     }
     int count = 0;
-    public void update(){
-        // In here update the canvas based on the graph
-        gc.setFill(Color.web("#43434cff"));
-        gc.fillRect(0,0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
+    public void update() throws IOException {
 
-        gc.setFill(Color.web("#43434cff"));
-        Vertex vertex = new Vertex(100,100);
-        // Here is where we could also start to take the snapshots of the canvas
-        gc.setFill(Color.DARKKHAKI);
-        vertex.draw(gc);
-        // recorder.record(gc.getCanvas());
-//        if (count == 240){
-//            recorder.stop();
+        if (count == 0){
+            //recorder.start();
+            graph = new AdjacencyList();
+            graph.makeRndGraph(3,2);
+            animationScheduler.makeGraphAppear(graph);
+            FDG = new FruchReinFDG(graph);
+
+        }
+
+        // In here update the canvas based on the graph
+
+        gc.setFill(Color.web("#2B2B2B"));
+
+        animationScheduler.update(gc);
+
+        count += 1;
+        if (count == 200){
+           recorder.stop();
+       }
+        if (count < 200 && count >= 0){
+            //animationScheduler.drawGraph(graph);
+            if (count > 20){
+                animationScheduler.drawGraph(graph);
+                FDG.update();
+            }
+            recorder.record(gc.getCanvas());
+
+        }
+
+//        try {
+//
+//            recorder.screenShot(gc.getCanvas());
+//
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
 //        }
 
     }
