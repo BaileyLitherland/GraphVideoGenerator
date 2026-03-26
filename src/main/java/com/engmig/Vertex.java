@@ -10,7 +10,7 @@ public class Vertex implements Drawable {
     Vector3d pos;
     double radius = 50;
     Color colour = Color.DARKKHAKI;
-
+    Vector3d disp;
     public Vertex(double x, double y){
         pos = new Vector3d(x,y,0);
     }
@@ -47,5 +47,15 @@ public class Vertex implements Drawable {
         return radius;
     }
 
+    public void setDisp(Vector3d d){
+        disp = d;
+    }
 
+    public Vector3d getDisp(){
+        return disp;
+    }
+
+    public void addDisp(Vector3d v){
+        disp.add(v);
+    }
 }

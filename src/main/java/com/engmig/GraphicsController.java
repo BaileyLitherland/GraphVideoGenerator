@@ -57,7 +57,7 @@ public class GraphicsController {
         if (count == 0){
             //recorder.start();
             graph = new AdjacencyList();
-            graph.makeRndGraph(3,2);
+            graph.makeRndGraph(25,40);
             animationScheduler.makeGraphAppear(graph);
             FDG = new FruchReinFDG(graph);
 
@@ -70,12 +70,12 @@ public class GraphicsController {
         animationScheduler.update(gc);
 
         count += 1;
-        if (count == 200){
+        if (count == 400){
            recorder.stop();
        }
-        if (count < 200 && count >= 0){
+        if (count < 400 && count >= 0){
             //animationScheduler.drawGraph(graph);
-            if (count > 20){
+            if (count > 100){
                 animationScheduler.drawGraph(graph);
                 FDG.update();
             }
