@@ -22,7 +22,9 @@ public class EdgeLine implements Drawable{
     }
 
     public void draw(GraphicsContext gc, int frameNum) {
-        if (x1 != x2 && y1 != y2) {
+
+        if (x1 != x2 || y1 != y2) {
+
             gc.setStroke(Paint.valueOf("#4E4D80"));
             gc.setLineWidth(10);
             gc.strokeLine(x1, y1, x2, y2);

@@ -26,10 +26,11 @@ public class AdjacencyList extends Graph{
     @Override
     public ArrayList<Vertex> getNeighbours(int x) {
         ArrayList<Vertex> rtnArray = new ArrayList<Vertex>();
-
-        for (Integer vertex : edges.get(x)) {
-            rtnArray.add(vertices.get(vertex));
-        }
+        //if (edges.size() > 0) {
+            for (Integer vertex : edges.get(x)) {
+                rtnArray.add(vertices.get(vertex));
+            }
+        //}
         return rtnArray;
     }
 
@@ -48,6 +49,12 @@ public class AdjacencyList extends Graph{
         vertices.add(newVertex);
         edges.add(new ArrayList<Integer>());
         return newVertex;
+    }
+
+    @Override
+    public void addVertex(Vertex v) {
+        vertices.add(v);
+        edges.add(new ArrayList<Integer>());
     }
 
     @Override

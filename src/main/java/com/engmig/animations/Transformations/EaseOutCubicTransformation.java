@@ -24,6 +24,7 @@ public class EaseOutCubicTransformation extends Transformation {
         this.numFrames = numFrames;
         this.startFrame = startFrame;
         this.startPosition = startPosition;
+        this.endPosition = endPosition;
         deltaX = (startPosition.getX() - endPosition.getX());
         deltaY = (startPosition.getY() - endPosition.getY());
         //System.out.println(object + " " +  this.object);

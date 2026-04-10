@@ -34,6 +34,11 @@ public class AnimationScheduler {
         objects.add(animation.getObject());
     }
 
+    public void addAnimationToStart(Animation animation){
+        animations.add(0,animation);
+        objects.add(0,animation.getObject());
+    }
+
     public void createLinearAnimation(Drawable object, Vector3d startPosition, Vector3d endPosition, int numFrames, int startFrame){
         LinearTransformation animation = new LinearTransformation(object,startPosition, endPosition, numFrames, startFrame);
         addAnimation(animation);
@@ -95,11 +100,38 @@ public class AnimationScheduler {
         }
         for(Animation v: verticesAnimations){
             addAnimation(v);
-            System.out.println("adding animation");
         }
 
     }
 
+    public void makeEdgesAppear(Graph graph){
+        ArrayList<Animation> edgesAnimations = new ArrayList<Animation>();
+        ArrayList<ArrayList<Integer>> edges = graph.getEdges();
+        ArrayList<Animation> verticesAnimations = new ArrayList<Animation>();
+        ArrayList<Vertex> vertices = graph.getVertices();
+        int vNum = 0;
+        int count = 0;
+        for(Vertex v: vertices) {
+            Animation noAni = new NoAnimation(v);
+            ArrayList<Vertex> neighbours = graph.getNeighbours(vNum);
+            for(Vertex n: neighbours){
+                if (graph.getVertexIndex(n) < vNum){
+                    Animation linearTransform = new LinearTransformation(new EdgeLine(v.pos.x, v.pos.y, v.pos.x, v.pos.y),v.pos,n.pos,30, count+(vNum*1)+1);
+                    edgesAnimations.add(linearTransform);
+                }
+            }
+            vNum += 1;
+            verticesAnimations.add(noAni);
+        }
+
+        for(Animation e: edgesAnimations){
+            addAnimationToStart(e);
+        }
+
+        for(Animation v: verticesAnimations){
+            addAnimation(v);
+        }
+    }
     public void drawGraph(Graph graph){
         animations.clear();
         objects.clear();
@@ -111,15 +143,11 @@ public class AnimationScheduler {
         for(Vertex v: vertices) {
             Animation noAniV = new NoAnimation(v);
 
-
             ArrayList<Vertex> neighbours = graph.getNeighbours(vNum);
             for(Vertex n: neighbours){
-                if (graph.getVertexIndex(n) < vNum){
-                    System.out.println(v.getPos() + " " + n.getPos());
-
-                    Animation noAniE = new NoAnimation(new EdgeLine(v.pos.x, v.pos.y, n.pos.x, n.pos.y));
-                    edgesAnimations.add(noAniE);
-                }
+                System.out.println(v.getPos() + " " + n.getPos());
+                Animation noAniE = new NoAnimation(new EdgeLine(v.pos.x, v.pos.y, n.pos.x, n.pos.y));
+                edgesAnimations.add(noAniE);
             }
             verticesAnimations.add(noAniV);
 
@@ -127,12 +155,13 @@ public class AnimationScheduler {
         }
 
         for(Animation e: edgesAnimations){
+            System.out.println("animation added");
             addAnimation(e);
         }
         for(Animation v: verticesAnimations){
             addAnimation(v);
         }
-        //System.out.println(animations.size());
+        System.out.println(animations.size());
     }
 
 

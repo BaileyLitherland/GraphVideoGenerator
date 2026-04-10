@@ -4,6 +4,7 @@ import com.engmig.FDGSolvers.FruchReinFDG;
 import com.engmig.FDGSolvers.NaiveFDG;
 import com.engmig.animations.Animation;
 import com.engmig.animations.Scalers.EaseInOutQuinScaler;
+import com.engmig.animations.Transformations.EaseOutCubicTransformation;
 import com.engmig.animations.Transformations.LinearTransformation;
 import com.engmig.graphs.AdjacencyList;
 import com.engmig.graphs.Graph;
@@ -56,10 +57,38 @@ public class GraphicsController {
 
         if (count == 0){
             //recorder.start();
+            //graph = new AdjacencyList();
+            //graph.makeRndGraph(25,40);
+            //animationScheduler.makeGraphAppear(graph);
+            Vertex v1 = new Vertex(3840/2 + 500 ,2160/2+500);
+            Vertex v2 = new Vertex(3840/2 - 500 ,2160/2-500);
+            Vertex v3 = new Vertex(3840/2 - 500 ,2160/2+500);
+            Vertex v4 = new Vertex(3840/2 + 500 ,2160/2-500);
+
             graph = new AdjacencyList();
-            graph.makeRndGraph(25,40);
-            animationScheduler.makeGraphAppear(graph);
-            FDG = new FruchReinFDG(graph);
+            graph.addVertex(v1);
+            graph.addVertex(v2);
+            graph.addVertex(v3);
+            graph.addVertex(v4);
+
+            graph.addEdge(0,2,0);
+            graph.addEdge(2,1,0);
+            graph.addEdge(3,1,0);
+            graph.addEdge(0,3,0);
+
+
+            animationScheduler.makeEdgesAppear(graph);
+
+            //EaseOutCubicTransformation trans1 = new EaseOutCubicTransformation(v1, new Vector3d(3840/2 + 500 ,2160/2-500,0),new Vector3d(3840/2 +1500 ,2160/2-500,0),50,3);
+            //EaseOutCubicTransformation trans4 = new EaseOutCubicTransformation(v4, new Vector3d(3840/2 + 500 ,2160/2-500,0),new Vector3d(3840/2 + 500 ,2160/2-500,0),1,3);
+            //EaseOutCubicTransformation trans2 = new EaseOutCubicTransformation(v2, new Vector3d(3840/2 + 500 ,2160/2+500,0),new Vector3d(3840/2+1500,2160/2+500,0),50,3);
+            //EaseOutCubicTransformation trans3 = new EaseOutCubicTransformation(v3, new Vector3d(3840/2 + 500 ,2160/2+500,0),new Vector3d(3840/2 + 500 ,2160/2+500,0),1,3);
+
+            //FDG = new FruchReinFDG(graph);
+//            animationScheduler.addAnimation(trans1);
+//            animationScheduler.addAnimation(trans2);
+//            animationScheduler.addAnimation(trans3);
+//            animationScheduler.addAnimation(trans4);
 
         }
 
@@ -67,18 +96,20 @@ public class GraphicsController {
 
         gc.setFill(Color.web("#2B2B2B"));
 
-        animationScheduler.update(gc);
+
 
         count += 1;
-        if (count == 400){
+        if (count == 110){
            recorder.stop();
        }
-        if (count < 400 && count >= 0){
-            //animationScheduler.drawGraph(graph);
+        if (count < 110 && count >= 0){
+
             if (count > 100){
                 animationScheduler.drawGraph(graph);
-                FDG.update();
+                //animationScheduler.drawGraph(graph);
+                //FDG.update();
             }
+            animationScheduler.update(gc);
             recorder.record(gc.getCanvas());
 
         }

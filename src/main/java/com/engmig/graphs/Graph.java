@@ -15,6 +15,8 @@ public abstract class Graph {
 
     public abstract Vertex addVertex(); // Adds a new vertex of degree 0 to the graph
 
+    public abstract void addVertex(Vertex v); // Adds a vertex v to the graph
+
     public abstract void removeVertex(int x); // Removes vertex at index x from graph and it's edges
 
     public abstract void addEdge(int x, int y, int w); // Adds edge from vertices x to y with weight w
@@ -24,7 +26,6 @@ public abstract class Graph {
     public abstract Vertex getVertex(int x); // Gets vertex at index x
 
     public abstract int getVertexIndex(Vertex vertex); // Gets index of a vertex
-
 
     public abstract ArrayList<Vertex> getVertices(); // Gets all vertices
 
