@@ -26,7 +26,7 @@ public class EdgeLine implements Drawable{
         if (x1 != x2 || y1 != y2) {
 
             gc.setStroke(Paint.valueOf("#4E4D80"));
-            gc.setLineWidth(10);
+            gc.setLineWidth(3);
             gc.strokeLine(x1, y1, x2, y2);
         }
     }

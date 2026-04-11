@@ -141,4 +141,29 @@ public class AdjacencyList extends Graph{
             addEdge(v1,v2,0);
         }
     }
+
+    public void makeNVerticesOnCircle(int numV,double h,double k, double r){
+        for (int i = 0; i < numV; i++){
+            Vertex v = addVertex();
+            v.setPos(new Vector3d(h+r*Math.cos(i * 2 * Math.PI/numV),k+r*Math.sin(i * 2* Math.PI/numV),0));
+        }
+    }
+
+    public void addRandomEdges(int numE){
+        int numV = getNumVertices();
+        Random random = new Random();
+        for(int i = 0; i < numE; i++ ){
+            int v1 = random.nextInt(numV);
+            int v2 = random.nextInt(numV);
+            if (v2 == v1){
+                if (v1 != numV -1 ){
+                    v1 =  v1 + 1;
+                }
+                else{
+                    v1 = v1 - 1;
+                }
+            }
+            addEdge(v1,v2,0);
+        }
+    }
 }

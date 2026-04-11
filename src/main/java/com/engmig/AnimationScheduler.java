@@ -78,7 +78,7 @@ public class AnimationScheduler {
         int vNum = 0;
         int count = 0;
         for(Vertex v: vertices) {
-            Animation scaler = new EaseInOutQuinScaler(v,count+(vNum*1),10,0,50);
+            Animation scaler = new EaseInOutQuinScaler(v,count+(vNum*1),20,0,25);
 
 
             ArrayList<Vertex> neighbours = graph.getNeighbours(vNum);
