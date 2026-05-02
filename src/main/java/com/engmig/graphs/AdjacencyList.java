@@ -1,27 +1,57 @@
 package com.engmig.graphs;
 
 import com.engmig.Vertex;
+import org.jcodec.common.DictionaryCompressor;
 
 import javax.vecmath.Vector3d;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class AdjacencyList{
+public class AdjacencyList extends Graph{
 
     ArrayList<Vertex> vertices = new ArrayList<>();
 
     ArrayList<ArrayList<Integer>> edges = new ArrayList<>();
 
+    @Override
     public ArrayList<Integer> getNeighbours(Vertex v) {
         int vertexId = vertices.indexOf(v);
         return edges.get(vertexId);
     }
 
-    public void addVertex(v){
-
+    @Override
+    public void addVertex(Vertex v){
+        vertices.add(v);
+        edges.add(new ArrayList<Integer>());
     }
-//  Vertex | Indices of adjacent Vertices
+
+    // For if we are dealing with vertices index
+    @Override
+    public void addEdge(int v, int u){
+        // Assumes our graphs are undirected
+        edges.get(v).add(u);
+        edges.get(u).add(v);
+    }
+
+    // For if we are dealing with vertices
+    @Override
+    public void addEdge(Vertex v, Vertex u){
+        // Assumes our graphs are undirected
+        int vertexVIndex = vertices.indexOf(v);
+        int vertexUIndex = vertices.indexOf(u);
+        edges.get(vertexVIndex).add(vertexUIndex);
+        edges.get(vertexUIndex).add(vertexVIndex);
+    }
+
+    @Override
+    public int size() {
+        return vertices.size();
+    }
+
+
+
+    //  Vertex | Indices of adjacent Vertices
 //        0| [2,3]
 //        1| [2]
 //        2| [0,1,3]
@@ -32,7 +62,7 @@ public class AdjacencyList{
 
 
 
-    @Override
+//    @Override
     public boolean isAdjacent(int x, int y) {
         if (edges.get(x).contains(y)){
             return true;
@@ -41,7 +71,7 @@ public class AdjacencyList{
     }
 
 
-    @Override
+//    @Override
     public ArrayList<Vertex> getNeighbourss(int x) {
         ArrayList<Vertex> rtnArray = new ArrayList<Vertex>();
         //if (edges.size() > 0) {
@@ -52,30 +82,25 @@ public class AdjacencyList{
         return rtnArray;
     }
 
-    @Override
-    public ArrayList<Vertex> getNeighboursss(Vertex x) {
-        return getNeighbours(getVertexIndex(x));
-    }
+//    @Override
+//    public ArrayList<Vertex> getNeighboursss(Vertex x) {
+//        return getNeighbours(getVertexIndex(x));
+//    }
 
-    /**
-     * @return
-     */
-    @Override
-    public Vertex addVertex() {
+//    /**
+//     * @return
+//     */
+//    @Override
+//    public Vertex addVertex() {
+//
+//        Vertex newVertex = new Vertex();
+//        vertices.add(newVertex);
+//        edges.add(new ArrayList<Integer>());
+//        return newVertex;
+//    }
 
-        Vertex newVertex = new Vertex();
-        vertices.add(newVertex);
-        edges.add(new ArrayList<Integer>());
-        return newVertex;
-    }
 
-    @Override
-    public void addVertex(Vertex v) {
-        vertices.add(v);
-        edges.add(new ArrayList<Integer>());
-    }
-
-    @Override
+//    @Override
     public void removeVertex(int x) {
         vertices.remove(x);
         // Remove the vertex from the edges list
@@ -90,82 +115,82 @@ public class AdjacencyList{
         }
     }
 
-    @Override
+//    @Override
     public void addEdge(int x, int y, int w) {
         // TODO Check for double edges
         edges.get(x).add(y);
         edges.get(y).add(x);
     }
 
-    @Override
+//    @Override
     public void removeEdge(int x, int y) {
         edges.get(x).remove(y);
         edges.get(y).remove(x);
     }
 
-    @Override
+//    @Override
     public Vertex getVertex(int x) {
         return vertices.get(x);
     }
 
 
-    @Override
+//    @Override
     public int getVertexIndex(Vertex vertex) {
         return vertices.indexOf(vertex);
     }
 
 
-    @Override
+//    @Override
     public ArrayList<Vertex> getVertices() {
         return vertices;
     }
 
 
-    @Override
+//    @Override
     public double getEdgeValue(int x, int y) {
         return 0;
     }
 
 
-    @Override
+//    @Override
     public int getNumVertices() {
         return vertices.size();
     }
 
-    @Override
+//    @Override
     public ArrayList<ArrayList<Integer>> getEdges() {
         return edges;
     }
 
-    public void makeRndGraph(int numV, int numE){
+//    public void makeRndGraph(int numV, int numE){
+//
+//        Random random = new Random();
+//        for(int i = 0; i < numV; i++ ){
+//            addVertex();
+//            Vertex v = getVertex(i);
+//            v.setPos(new Vector3d(random.nextInt(3600)+ 120, random.nextInt(2000)+80, 0));
+//        }
+//        for(int i = 0; i < numE; i++ ){
+//            int v1 = random.nextInt(numV);
+//            int v2 = random.nextInt(numV);
+//            if (v2 == v1){
+//                if (v1 != numV -1 ){
+//                    v1 =  v1 + 1;
+//                }
+//                else{
+//                    v1 = v1 - 1;
+//                }
+//            }
+//            addEdge(v1,v2,0);
+//        }
+//    }
 
-        Random random = new Random();
-        for(int i = 0; i < numV; i++ ){
-            addVertex();
-            Vertex v = getVertex(i);
-            v.setPos(new Vector3d(random.nextInt(3600)+ 120, random.nextInt(2000)+80, 0));
-        }
-        for(int i = 0; i < numE; i++ ){
-            int v1 = random.nextInt(numV);
-            int v2 = random.nextInt(numV);
-            if (v2 == v1){
-                if (v1 != numV -1 ){
-                    v1 =  v1 + 1;
-                }
-                else{
-                    v1 = v1 - 1;
-                }
-            }
-            addEdge(v1,v2,0);
-        }
-    }
-
-    public void makeNVerticesOnCircle(int numV,double h,double k, double r){
-        for (int i = 0; i < numV; i++){
-            Vertex v = addVertex();
-            v.setPos(new Vector3d(h+r*Math.cos((i * 2 * Math.PI/numV)+ Math.PI/4),k+r*Math.sin((i * 2* Math.PI/numV)+ Math.PI/4),0));
-        }
-    }
+//    public void makeNVerticesOnCircle(int numV,double h,double k, double r){
+//        for (int i = 0; i < numV; i++){
+//            Vertex v = addVertex();
+//            v.setPos(new Vector3d(h+r*Math.cos((i * 2 * Math.PI/numV)+ Math.PI/4),k+r*Math.sin((i * 2* Math.PI/numV)+ Math.PI/4),0));
+//        }
+//    }
 
     public void addRandomEdges(int numE){
         int numV = getNumVertices();

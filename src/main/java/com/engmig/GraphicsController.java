@@ -1,20 +1,12 @@
 package com.engmig;
 
 import com.engmig.FDGSolvers.FruchReinFDG;
-import com.engmig.FDGSolvers.NaiveFDG;
-import com.engmig.animations.Animation;
-import com.engmig.animations.Scalers.EaseInOutQuinScaler;
-import com.engmig.animations.Transformations.EaseOutCubicTransformation;
-import com.engmig.animations.Transformations.LinearTransformation;
 import com.engmig.graphs.AdjacencyList;
-import com.engmig.graphs.AdjacencyListBasicForVideo;
 import com.engmig.graphs.Graph;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-import javax.vecmath.Vector3d;
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class GraphicsController {
 
@@ -24,7 +16,6 @@ public class GraphicsController {
     private static FruchReinFDG FDG;
     private static boolean recording;
     private AdjacencyList graph;
-    private AdjacencyListBasicForVideo graph2;
 
     private GraphicsRecorder recorder;
 
@@ -75,13 +66,14 @@ public class GraphicsController {
 //            graph.addVertex(v3);
 //            graph.addVertex(v4);
 //
-            graph.addEdge(0,1,0);
-            //graph.addEdge(2,1,0);
-            //graph.addEdge(2,3,0);
-            //graph.addEdge(0,3,0);
+            graph.addEdge(0,1);
+            //graph.addEdge(2,1);
+            //graph.addEdge(2,3);
+            //graph.addEdge(0,3);
 
-
+            graph.addEdge(v1,v4);
             animationScheduler.makeEdgesAppear(graph);
+            graph.size();
             //animationScheduler.makeGraphAppear(graph);
             //EaseOutCubicTransformation trans1 = new EaseOutCubicTransformation(v1, new Vector3d(3840/2 + 500 ,2160/2-500,0),new Vector3d(3840/2 +1500 ,2160/2-500,0),50,3);
             //EaseOutCubicTransformation trans4 = new EaseOutCubicTransformation(v4, new Vector3d(3840/2 + 500 ,2160/2-500,0),new Vector3d(3840/2 + 500 ,2160/2-500,0),1,3);
