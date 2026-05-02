@@ -10,16 +10,16 @@ import java.util.ArrayList;
 public class FruchReinFDG {
     Graph graph;
     final double SPRING_CONSTANT = .0001;
-    final double REPULSIVE_FORCE = -.01;
+    final double REPULSIVE_FORCE = -1;
 
-    double t = 300; // TODO: Make it relative to the size of the canvas
+    double t = .25; // TODO: Make it relative to the size of the canvas
 
     private int iterationCount = 1;
     double targetDistance;
 
     public FruchReinFDG(Graph graph){
         this.graph = graph;
-        targetDistance = Math.sqrt(7400000/(graph.getNumVertices()+10));
+        targetDistance = Math.sqrt((double) 1000000 /(graph.getNumVertices())+10);
     }
 
     public void update(){
@@ -100,9 +100,19 @@ public class FruchReinFDG {
     }
 
     private void cool(double i){
+//        System.out.println(i);
+        if(i < 10) {
+            t = 200;
+        } else if (i < 100) {
+            t = 10;
+        }else{
+            t = 1;
+        }
+
+//        System.out.println("t:" + t);
         //double x = (180/i);
         //t = 1 - Math.pow(1 - x, 3);
-        t = 300/((i));
+
     }
 
 

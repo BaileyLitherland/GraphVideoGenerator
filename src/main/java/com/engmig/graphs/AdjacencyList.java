@@ -3,15 +3,33 @@ package com.engmig.graphs;
 import com.engmig.Vertex;
 
 import javax.vecmath.Vector3d;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class AdjacencyList extends Graph{
+public class AdjacencyList{
 
-    ArrayList<Vertex> vertices = new ArrayList<Vertex>();
+    ArrayList<Vertex> vertices = new ArrayList<>();
 
-    // Edges are a tuple of indices where each index refers to a vertex in the vertices array
-    ArrayList<ArrayList<Integer>> edges = new ArrayList<ArrayList<Integer>>();
+    ArrayList<ArrayList<Integer>> edges = new ArrayList<>();
+
+    public ArrayList<Integer> getNeighbours(Vertex v) {
+        int vertexId = vertices.indexOf(v);
+        return edges.get(vertexId);
+    }
+
+    public void addVertex(v){
+
+    }
+//  Vertex | Indices of adjacent Vertices
+//        0| [2,3]
+//        1| [2]
+//        2| [0,1,3]
+//        3| [0,2]
+//        4| []
+
+
+
 
 
     @Override
@@ -24,7 +42,7 @@ public class AdjacencyList extends Graph{
 
 
     @Override
-    public ArrayList<Vertex> getNeighbours(int x) {
+    public ArrayList<Vertex> getNeighbourss(int x) {
         ArrayList<Vertex> rtnArray = new ArrayList<Vertex>();
         //if (edges.size() > 0) {
             for (Integer vertex : edges.get(x)) {
@@ -35,7 +53,7 @@ public class AdjacencyList extends Graph{
     }
 
     @Override
-    public ArrayList<Vertex> getNeighbours(Vertex x) {
+    public ArrayList<Vertex> getNeighboursss(Vertex x) {
         return getNeighbours(getVertexIndex(x));
     }
 
@@ -145,7 +163,7 @@ public class AdjacencyList extends Graph{
     public void makeNVerticesOnCircle(int numV,double h,double k, double r){
         for (int i = 0; i < numV; i++){
             Vertex v = addVertex();
-            v.setPos(new Vector3d(h+r*Math.cos(i * 2 * Math.PI/numV),k+r*Math.sin(i * 2* Math.PI/numV),0));
+            v.setPos(new Vector3d(h+r*Math.cos((i * 2 * Math.PI/numV)+ Math.PI/4),k+r*Math.sin((i * 2* Math.PI/numV)+ Math.PI/4),0));
         }
     }
 
