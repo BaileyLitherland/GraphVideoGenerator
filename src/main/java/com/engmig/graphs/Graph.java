@@ -21,7 +21,11 @@ public abstract class Graph {
 
     public abstract ArrayList<ArrayList<Integer>> getEdges(); // Returns list of edges
 
+    public abstract Vertex getVertex(int x);
 
+    public abstract void removeVertex(int x);
+
+    public abstract void removeEdge(int x, int y);
 
 
 }

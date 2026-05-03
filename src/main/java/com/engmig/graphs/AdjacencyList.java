@@ -49,7 +49,58 @@ public class AdjacencyList extends Graph{
         return vertices.size();
     }
 
+    @Override
+    public ArrayList<Vertex> getVertices() {
+        return vertices;
+    }
 
+    @Override
+    public ArrayList<ArrayList<Integer>> getEdges() {
+        return edges;
+    }
+
+    @Override
+    public Vertex getVertex(int x) {
+        return vertices.get(x);
+    }
+
+    @Override
+    public void removeVertex(int x) {
+        vertices.remove(x);
+        // Now we have to refactor the array to ensure relationships are correctly maintained.
+        for (ArrayList<Integer> neighbours: edges){
+            int edgeToRemove = neighbours.indexOf(x);
+            if (edgeToRemove != -1){
+                neighbours.remove(edgeToRemove);
+            }
+            for (Integer n: neighbours) {
+                // Subtract 1 from every index that was greater than the index of the vertices we were removing
+                if (n > x) {
+                    n = n - 1;
+                }
+            }
+
+        }
+        edges.remove(x);
+    }
+
+    @Override
+    public void removeEdge(int x, int y) {
+        int yIndex = edges.get(x).indexOf(y);
+        edges.get(x).remove(yIndex);
+        int xIndex = edges.get(y).indexOf(x);
+        edges.get(y).remove(xIndex);
+
+    }
+
+    public void makeNVerticesOnCircle(int numV,double h,double k, double r){
+        for (int i = 0; i < numV; i++){
+            Vertex v = new Vertex();
+            addVertex(v);
+            double a = (i * 2 * Math.PI / numV) + Math.PI / 4;
+            v.setPos(new Vector3d(h+r*Math.cos(a),k+r*Math.sin(a),0));
+        }
+    }
 
     //  Vertex | Indices of adjacent Vertices
 //        0| [2,3]
@@ -101,37 +152,19 @@ public class AdjacencyList extends Graph{
 
 
 //    @Override
-    public void removeVertex(int x) {
-        vertices.remove(x);
-        // Remove the vertex from the edges list
-        for (ArrayList<Integer> edge: edges){
-            for (Integer vertex: edge){
-                if (vertex > x){
-                    vertex = vertex + 1;
-                } else if (vertex == x) {
-                    edges.remove(edge);
-                }
-            }
-        }
-    }
+
 
 //    @Override
-    public void addEdge(int x, int y, int w) {
-        // TODO Check for double edges
-        edges.get(x).add(y);
-        edges.get(y).add(x);
-    }
+//    public void addEdge(int x, int y, int w) {
+//        // TODO Check for double edges
+//        edges.get(x).add(y);
+//        edges.get(y).add(x);
+//    }
+
+
 
 //    @Override
-    public void removeEdge(int x, int y) {
-        edges.get(x).remove(y);
-        edges.get(y).remove(x);
-    }
 
-//    @Override
-    public Vertex getVertex(int x) {
-        return vertices.get(x);
-    }
 
 
 //    @Override
@@ -141,9 +174,7 @@ public class AdjacencyList extends Graph{
 
 
 //    @Override
-    public ArrayList<Vertex> getVertices() {
-        return vertices;
-    }
+
 
 
 //    @Override
@@ -157,10 +188,6 @@ public class AdjacencyList extends Graph{
         return vertices.size();
     }
 
-//    @Override
-    public ArrayList<ArrayList<Integer>> getEdges() {
-        return edges;
-    }
 
 //    public void makeRndGraph(int numV, int numE){
 //
@@ -185,12 +212,6 @@ public class AdjacencyList extends Graph{
 //        }
 //    }
 
-//    public void makeNVerticesOnCircle(int numV,double h,double k, double r){
-//        for (int i = 0; i < numV; i++){
-//            Vertex v = addVertex();
-//            v.setPos(new Vector3d(h+r*Math.cos((i * 2 * Math.PI/numV)+ Math.PI/4),k+r*Math.sin((i * 2* Math.PI/numV)+ Math.PI/4),0));
-//        }
-//    }
 
     public void addRandomEdges(int numE){
         int numV = getNumVertices();
@@ -206,7 +227,7 @@ public class AdjacencyList extends Graph{
                     v1 = v1 - 1;
                 }
             }
-            addEdge(v1,v2,0);
+            addEdge(v1,v2);
         }
     }
 }
