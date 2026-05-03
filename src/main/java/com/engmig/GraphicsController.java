@@ -51,7 +51,7 @@ public class GraphicsController {
         if (count == 0){
             //recorder.start();
             graph = new AdjacencyList();
-            graph.makeNVerticesOnCircle(5,3840/2,2160/2,750);
+            graph.makeNVerticesOnCircle(6,3840/2,2160/2,750);
             //graph.addRandomEdges(4);
             //animationScheduler.makeGraphAppear(graph);
             //graph.addRandomEdges(1000);
@@ -68,20 +68,20 @@ public class GraphicsController {
 //            graph.addVertex(v3);
 //            graph.addVertex(v4);
 ////
-            graph.addEdge(0,1);
+            //graph.addEdge(0,1);
             //graph.addEdge(2,1);
             //graph.addEdge(2,3);
             //graph.addEdge(0,3);
 
             //graph.addEdge(v1,v4);
-            animationScheduler.makeEdgesAppear(graph);
-            graph.size();
+            //animationScheduler.makeEdgesAppear(graph);
+            //graph.size();
 
-            graph.getVertex(0);
+            //graph.getVertex(0);
 
 //            graph.removeVertex(0);
 
-            //animationScheduler.makeGraphAppear(graph);
+            animationScheduler.makeGraphAppear(graph);
             //EaseOutCubicTransformation trans1 = new EaseOutCubicTransformation(v1, new Vector3d(3840/2 + 500 ,2160/2-500,0),new Vector3d(3840/2 +1500 ,2160/2-500,0),50,3);
             //EaseOutCubicTransformation trans4 = new EaseOutCubicTransformation(v4, new Vector3d(3840/2 + 500 ,2160/2-500,0),new Vector3d(3840/2 + 500 ,2160/2-500,0),1,3);
             //EaseOutCubicTransformation trans2 = new EaseOutCubicTransformation(v2, new Vector3d(3840/2 + 500 ,2160/2+500,0),new Vector3d(3840/2+1500,2160/2+500,0),50,3);
@@ -102,24 +102,42 @@ public class GraphicsController {
 
 
         count += 1;
-        if (count == 120){
+        if (count == 300){
            recorder.stop();
        }
-        if (count < 120 && count >= 0){
+        if (count < 300 && count >= 0){
 
             if (count > 40){
                 //FDG.update();
-                animationScheduler.drawGraph(graph);
+                //animationScheduler.drawGraph(graph);
                 //animationScheduler.drawGraph(graph);
             }
             if (count == 50){
-                System.out.println("removeEdge");
-                graph.removeEdge(0,1);
-                graph.getNeighbours(graph.getVertex(1));
-                System.out.println(graph.getNeighbours(graph.getVertex(1)));
+                //System.out.println("removeEdge");
+                //graph.removeEdge(0,1);
+                //graph.getNeighbours(graph.getVertex(1));
+                //System.out.println(graph.getNeighbours(graph.getVertex(1)));
             }
             if (count == 100){
-                graph.removeVertex(0);
+                graph.addEdge(0,2);
+                graph.addEdge(0,3);
+                graph.addEdge(1,2);
+                graph.addEdge(2,3);
+                graph.addEdge(2,4);
+                graph.addEdge(2,5);
+                animationScheduler.makeEdgesAppear(graph);
+                //graph.removeVertex(0);
+            }
+
+            if (count == 150){
+                graph.removeEdge(2,4);
+                animationScheduler.drawGraph(graph);
+            }
+            if (count == 200){
+                System.out.println(graph.getEdges());
+                graph.removeVertex(1);
+                System.out.println(graph.getEdges());
+                animationScheduler.drawGraph(graph);
             }
             animationScheduler.update(gc);
             recorder.record(gc.getCanvas());

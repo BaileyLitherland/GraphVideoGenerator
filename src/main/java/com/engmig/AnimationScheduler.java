@@ -110,7 +110,7 @@ public class AnimationScheduler {
         ArrayList<Animation> verticesAnimations = new ArrayList<Animation>();
         ArrayList<Vertex> vertices = graph.getVertices();
         int vNum = 0;
-        int count = 0;
+        int count = 100;
         for(Vertex v: vertices) {
             Animation noAni = new NoAnimation(v);
             ArrayList<Integer> neighbours = graph.getNeighbours(vertices.get(vNum));

@@ -73,10 +73,10 @@ public class AdjacencyList extends Graph{
             if (edgeToRemove != -1){
                 neighbours.remove(edgeToRemove);
             }
-            for (Integer n: neighbours) {
+            for (int i = 0; i < neighbours.size(); i++) {
                 // Subtract 1 from every index that was greater than the index of the vertices we were removing
-                if (n > x) {
-                    n = n - 1;
+                if (neighbours.get(i) > x) {
+                    neighbours.set(i, neighbours.get(i) - 1);
                 }
             }
 
@@ -87,18 +87,22 @@ public class AdjacencyList extends Graph{
     @Override
     public void removeEdge(int x, int y) {
         int yIndex = edges.get(x).indexOf(y);
-        edges.get(x).remove(yIndex);
-        int xIndex = edges.get(y).indexOf(x);
-        edges.get(y).remove(xIndex);
+        if (yIndex != -1) {
+            edges.get(x).remove(yIndex);
+        }
 
+        int xIndex = edges.get(y).indexOf(x);
+        if (xIndex != -1){
+            edges.get(y).remove(xIndex);
+        }
     }
 
     public void makeNVerticesOnCircle(int numV,double h,double k, double r){
         for (int i = 0; i < numV; i++){
             Vertex v = new Vertex();
             addVertex(v);
-            double a = (i * 2 * Math.PI / numV) + Math.PI / 4;
-            v.setPos(new Vector3d(h+r*Math.cos(a),k+r*Math.sin(a),0));
+            double theta = (i * 2 * Math.PI / numV);
+            v.setPos(new Vector3d(h+r*Math.cos(theta),k+r*Math.sin(theta),0));
         }
     }
 
