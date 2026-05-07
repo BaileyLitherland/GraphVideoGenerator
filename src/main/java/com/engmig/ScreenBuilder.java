@@ -20,7 +20,7 @@ public class ScreenBuilder implements Builder<Region>{
 
         BorderPane results = new BorderPane();
         Node canvas = createCanvas();
-        //results.setCenter(canvas);
+        results.setCenter(canvas);
 
         return results;
     }

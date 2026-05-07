@@ -27,6 +27,7 @@ public abstract class Graph {
 
     public abstract void removeEdge(int x, int y);
 
+    public abstract boolean isAdjacent(int x, int y);
 
 }
 

@@ -78,13 +78,13 @@ public class AnimationScheduler {
         int count = 0;
         for(Vertex v: vertices) {
             //Animation scaler = new EaseInOutQuinScaler(v,2,10,0,25);
-            Animation scaler = new EaseInOutQuinScaler(v,count+(vNum*5),10,0,200);
+            Animation scaler = new EaseInOutQuinScaler(v,count+(vNum*10),10,0,200);
 
 
             ArrayList<Integer> neighbours = graph.getNeighbours(vertices.get(vNum));
             for(Integer n: neighbours){
                 if (n < vNum){
-                    Animation linearTransform = new LinearTransformation(new EdgeLine(v.pos.x, v.pos.y, v.pos.x, v.pos.y),v.pos,vertices.get(n).pos,20, count+(vNum*7)+1);
+                    Animation linearTransform = new LinearTransformation(new EdgeLine(v.pos.x, v.pos.y, v.pos.x, v.pos.y),v.pos,vertices.get(n).pos,30, count+(vNum*7)+1);
                     //System.out.println("npos:" + n.pos + "v pos: " + v.pos);
                     edgesAnimations.add(linearTransform);
                 }

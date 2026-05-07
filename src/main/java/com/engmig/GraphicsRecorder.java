@@ -2,7 +2,6 @@ package com.engmig;
 
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.WritableImage;
 import org.bytedeco.ffmpeg.global.avcodec;
 import org.bytedeco.ffmpeg.global.avutil;
@@ -10,24 +9,14 @@ import org.bytedeco.javacv.FFmpegFrameRecorder;
 import org.bytedeco.javacv.FFmpegLogCallback;
 import org.bytedeco.javacv.Frame;
 import org.bytedeco.javacv.Java2DFrameConverter;
-import org.jcodec.api.awt.AWTSequenceEncoder;
-import org.jcodec.common.AudioUtil;
-import org.jcodec.common.model.Rational;
-import org.jetbrains.annotations.NotNull;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.nio.ShortBuffer;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import org.bytedeco.javacv.*;
-import java.nio.ShortBuffer;
-
-
-import static java.io.FileDescriptor.out;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class GraphicsRecorder {
 
@@ -37,67 +26,76 @@ public class GraphicsRecorder {
     private FFmpegFrameRecorder recorder;
     private Java2DFrameConverter converter;
 
-    private static final File TEMP_DIRECTORY = new File(System.getProperty("java.io.tmpdir"));
-
     int imageCount = 0;
-    //List<BufferedImage> images = new ArrayList<BufferedImage>();
 
     // Variables for timing things
     long startTime;
     long endTime;
 
-    public GraphicsRecorder(){
+    private ExecutorService encoder;
+
+    public GraphicsRecorder() {
 
     }
 
-    public void start(){
+    public void start() {
 
     }
 
-    public void stop(){
+    public void stop() {
         imageCount = 0;
-        //recording = false;
         finishRecording();
     }
+
     public void record(Canvas canvas) throws IOException {
 
         if (imageCount == 0) {
-            //System.out.println("image count = 0 in graphicsRecorder");
-            //Set up JavaCV frame recorder
-            recorder = new FFmpegFrameRecorder("FrunchReinFDGUNNAMEDYETPLEASE RENAME ME.mp4",3840,2160);
-            // recorder.setPixelFormat();
+            recorder = new FFmpegFrameRecorder("output.mp4", 3840, 2160);
             recorder.setFormat("mp4");
-            recorder.setVideoOption("crf", "18");
-            recorder.setVideoOption("preset", "veryslow");
-            recorder.setVideoBitrate(20000000);
-//            recorder.setAudioChannels(1);
-//            recorder.setAudioCodec(avcodec.AV_CODEC_ID_AAC);
-            FFmpegLogCallback.set();
+            recorder.setFrameRate(30);
+            recorder.setVideoBitrate(20_000_000);
+            recorder.setVideoCodec(avcodec.AV_CODEC_ID_H264);
+            recorder.setPixelFormat(avutil.AV_PIX_FMT_YUV420P);
 
+            FFmpegLogCallback.set();
             converter = new Java2DFrameConverter();
-            if(recording  == true){
+
+            if (recording) {
                 System.out.println("start recording");
                 startTime = System.currentTimeMillis();
                 recorder.start();
             }
+
+            // Create the encoder thread pool once, not every frame
+            encoder = Executors.newSingleThreadExecutor();
         }
 
-        WritableImage canvasSnapshot = canvas.snapshot(null,null);
+        if (!recording) return;
 
-        BufferedImage bimg = SwingFXUtils.fromFXImage(canvasSnapshot, null);
-        //images.add(bimg);
-        // Convert to the right RBG format
-        BufferedImage bimgEdited = new BufferedImage(bimg.getWidth(),bimg.getHeight(),BufferedImage.TYPE_3BYTE_BGR);
-        bimgEdited.getGraphics().drawImage(bimg, 0, 0, null);
-        Frame frame = converter.getFrame(bimgEdited);
+        // Snapshot stays on FX thread (required)
+        WritableImage snap = canvas.snapshot(null, null);
 
-        recorder.record(frame);
+        // Capture timestamp HERE on FX thread before submitting,
+        // so frames are always monotonically increasing
+        final long timestamp = (long) ((imageCount * 1_000_000L) / 30); // microseconds, based on frame number
 
-        imageCount += 1;
+        // Everything else moves to background thread
+        encoder.submit(() -> {
+            BufferedImage bimg = SwingFXUtils.fromFXImage(snap, null);
+            BufferedImage bgr = new BufferedImage(bimg.getWidth(), bimg.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
+            bgr.getGraphics().drawImage(bimg, 0, 0, null);
+            try {
+                recorder.setTimestamp(timestamp);
+                recorder.record(converter.getFrame(bgr));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
 
+        imageCount++;
     }
 
-    public void recordSound(){
+    public void recordSound() {
         try {
             recorder.recordSamples();
         } catch (FFmpegFrameRecorder.Exception e) {
@@ -105,52 +103,48 @@ public class GraphicsRecorder {
         }
     }
 
-
-    public void finishRecording(){
+    public void finishRecording() {
         endTime = System.currentTimeMillis();
-        double recordingTime = (endTime - startTime)/1000.00;
+        double recordingTime = (endTime - startTime) / 1000.00;
 
-        System.out.println("video took " + recordingTime +"seconds to finish");
+        System.out.println("video took " + recordingTime + " seconds to finish");
         System.out.println("now saving video");
         startTime = System.currentTimeMillis();
 
         try {
-//            for (BufferedImage bimg: images){
-//                BufferedImage bimgEdited = new BufferedImage(bimg.getWidth(),bimg.getHeight(),BufferedImage.TYPE_3BYTE_BGR);
-//                bimgEdited.getGraphics().drawImage(bimg, 0, 0, null);
-//                Frame frame = converter.getFrame(bimgEdited);
-//            }
-
+            recording = false;
+            encoder.shutdown();
+            try {
+                encoder.awaitTermination(10, TimeUnit.SECONDS); // wait for last frames to flush
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             recorder.stop();
             recorder.release();
-            endTime = System.currentTimeMillis();
-            System.out.println("finish video");
-            recordingTime = (endTime - startTime)/1000.00;
-            System.out.println("encoding video took " + recordingTime +"seconds to finish");
-            //Process process = new ProcessBuilder("ffmpeg", "-f", "image2", "-i","image%d.png", "-pix_fmt", "yuv420p", "a.mp4").start();
-        } catch (IOException e) {
-            //throw new RuntimeException(e);
-        }
 
+            endTime = System.currentTimeMillis();
+            recordingTime = (endTime - startTime) / 1000.00;
+            System.out.println("finish video");
+            System.out.println("encoding video took " + recordingTime + " seconds to finish");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-
-    public void screenShot(Canvas canvas) throws IOException{
-        WritableImage canvasSnapshot = canvas.snapshot(null,null);
+    public void screenShot(Canvas canvas) throws IOException {
+        WritableImage canvasSnapshot = canvas.snapshot(null, null);
         BufferedImage bimg = SwingFXUtils.fromFXImage(canvasSnapshot, null);
-        BufferedImage bimgEdited = new BufferedImage(bimg.getWidth(),bimg.getHeight(),BufferedImage.TYPE_3BYTE_BGR);
+        BufferedImage bimgEdited = new BufferedImage(bimg.getWidth(), bimg.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
         bimgEdited.getGraphics().drawImage(bimg, 0, 0, null);
         File outputFile = new File("Image01.png");
         ImageIO.write(bimgEdited, "png", outputFile);
         System.out.println("Screen shot taken");
     }
 
-
-
-    public void createMP4(){
+    public void createMP4() {
         // This method will take the files saved in record and turn them into an MP4
-        // Using JCodec to encode the pngs to MP4 aznd save as unique file.
+        // Using JCodec to encode the pngs to MP4 and save as unique file.
         // Consider using an array of buffered images rather than save them
     }
-
 }
