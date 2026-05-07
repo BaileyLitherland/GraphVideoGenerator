@@ -79,18 +79,27 @@ public class GraphicsRecorder {
         // so frames are always monotonically increasing
         final long timestamp = (long) ((imageCount * 1_000_000L) / 30); // microseconds, based on frame number
 
+        BufferedImage bimg = SwingFXUtils.fromFXImage(snap, null);
+        BufferedImage bgr = new BufferedImage(bimg.getWidth(), bimg.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
+        bgr.getGraphics().drawImage(bimg, 0, 0, null);
+        try {
+            recorder.setTimestamp(timestamp);
+            recorder.record(converter.getFrame(bgr));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         // Everything else moves to background thread
-        encoder.submit(() -> {
-            BufferedImage bimg = SwingFXUtils.fromFXImage(snap, null);
-            BufferedImage bgr = new BufferedImage(bimg.getWidth(), bimg.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
-            bgr.getGraphics().drawImage(bimg, 0, 0, null);
-            try {
-                recorder.setTimestamp(timestamp);
-                recorder.record(converter.getFrame(bgr));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
+//        encoder.submit(() -> {
+//            BufferedImage bimg = SwingFXUtils.fromFXImage(snap, null);
+//            BufferedImage bgr = new BufferedImage(bimg.getWidth(), bimg.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
+//            bgr.getGraphics().drawImage(bimg, 0, 0, null);
+//            try {
+//                recorder.setTimestamp(timestamp);
+//                recorder.record(converter.getFrame(bgr));
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        });
 
         imageCount++;
     }

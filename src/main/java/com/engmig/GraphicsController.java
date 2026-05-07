@@ -217,11 +217,7 @@ public class GraphicsController {
         if (count == 0) {
             graph = new AdjacencyList();
             graph.makeNVerticesOnCircle(20, 3840 / 2, 2160 / 2, 750);
-            graph.addEdge(0, 2);
-            graph.addEdge(0, 3);
-            graph.addEdge(1, 2);
-            graph.addEdge(2, 3);
-            graph.addEdge(4,1);
+            graph.addRandomEdges(100);
             //animationScheduler.makeGraphAppear(graph);
             startRecording();
         }
@@ -236,6 +232,7 @@ public class GraphicsController {
 
         if (count < VIDEO_LENGTH + animationStart && count > animationStart && isRecording) {
             animationScheduler.update(gc);
+            recorder.record(gc.getCanvas());
         }
 
         count += 1;
@@ -252,25 +249,25 @@ public class GraphicsController {
         recorder.start();
 
         // Recording timer runs independently from the animation loop
-        recordingTimer = new AnimationTimer() {
-            @Override
-            public void handle(long now) {
-                if (!isRecording) {
-                    stop(); // stop this timer if recording stopped
-                    return;
-                }
-                if (now - lastRecordTime >= RECORD_INTERVAL_NS) {
-                    try {
-                        recorder.record(gc.getCanvas());
-
-                        lastRecordTime = now;
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        };
-        recordingTimer.start();
+//        recordingTimer = new AnimationTimer() {
+//            @Override
+//            public void handle(long now) {
+//                if (!isRecording) {
+//                    stop(); // stop this timer if recording stopped
+//                    return;
+//                }
+//                if (now - lastRecordTime >= RECORD_INTERVAL_NS) {
+//                    try {
+//                        recorder.record(gc.getCanvas());
+//
+//                        lastRecordTime = now;
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            }
+//        };
+//        recordingTimer.start();
     }
 
     public void stopRecording() {
