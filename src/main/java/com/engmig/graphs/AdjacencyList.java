@@ -106,6 +106,28 @@ public class AdjacencyList extends Graph{
         }
     }
 
+    public void addRandomEdges(int numE){
+        int numV = getNumVertices();
+        Random random = new Random();
+        for(int i = 0; i < numE; i++ ){
+            int v1 = random.nextInt(numV);
+            int v2 = random.nextInt(numV);
+            while (v1 == v2 || isAdjacent(v1,v2)){
+                v1 = random.nextInt(numV);
+                v2 = random.nextInt(numV);
+            }
+            addEdge(v1,v2);
+        }
+    }
+
+    @Override
+    public boolean isAdjacent(int x, int y) {
+        if (edges.get(x).contains(y)){
+            return true;
+        }
+        return false;
+    }
+
     //  Vertex | Indices of adjacent Vertices
 //        0| [2,3]
 //        1| [2]
@@ -117,13 +139,7 @@ public class AdjacencyList extends Graph{
 
 
 
-//    @Override
-    public boolean isAdjacent(int x, int y) {
-        if (edges.get(x).contains(y)){
-            return true;
-        }
-        return false;
-    }
+
 
 
 //    @Override
@@ -136,39 +152,6 @@ public class AdjacencyList extends Graph{
         //}
         return rtnArray;
     }
-
-//    @Override
-//    public ArrayList<Vertex> getNeighboursss(Vertex x) {
-//        return getNeighbours(getVertexIndex(x));
-//    }
-
-//    /**
-//     * @return
-//     */
-//    @Override
-//    public Vertex addVertex() {
-//
-//        Vertex newVertex = new Vertex();
-//        vertices.add(newVertex);
-//        edges.add(new ArrayList<Integer>());
-//        return newVertex;
-//    }
-
-
-//    @Override
-
-
-//    @Override
-//    public void addEdge(int x, int y, int w) {
-//        // TODO Check for double edges
-//        edges.get(x).add(y);
-//        edges.get(y).add(x);
-//    }
-
-
-
-//    @Override
-
 
 
 //    @Override
@@ -217,21 +200,5 @@ public class AdjacencyList extends Graph{
 //    }
 
 
-    public void addRandomEdges(int numE){
-        int numV = getNumVertices();
-        Random random = new Random();
-        for(int i = 0; i < numE; i++ ){
-            int v1 = random.nextInt(numV);
-            int v2 = random.nextInt(numV);
-            if (v2 == v1){
-                if (v1 != numV -1 ){
-                    v1 =  v1 + 1;
-                }
-                else{
-                    v1 = v1 - 1;
-                }
-            }
-            addEdge(v1,v2);
-        }
-    }
+
 }
