@@ -30,7 +30,7 @@ public class AnimationScheduler {
 
     public void addAnimation(Animation animation){
         animations.add(animation);
-        objects.add(animation.getObject());
+        //objects.add(animation.getObject());
     }
 
     public void addAnimationToStart(Animation animation){
@@ -78,15 +78,17 @@ public class AnimationScheduler {
         int count = 0;
         for(Vertex v: vertices) {
             //Animation scaler = new EaseInOutQuinScaler(v,2,10,0,25);
-            Animation scaler = new EaseInOutQuinScaler(v,count+(vNum*10),10,0,200);
+            Animation scaler = new EaseInOutQuinScaler(v,count,1,0,30);
 
 
             ArrayList<Integer> neighbours = graph.getNeighbours(vertices.get(vNum));
             for(Integer n: neighbours){
                 if (n < vNum){
-                    Animation linearTransform = new LinearTransformation(new EdgeLine(v.pos.x, v.pos.y, v.pos.x, v.pos.y),v.pos,vertices.get(n).pos,30, count+(vNum*7)+1);
+                    EdgeLine el = new EdgeLine(v.pos.x, v.pos.y, v.pos.x, v.pos.y);
+                    Animation linearTransform = new LinearTransformation(el,v.pos,vertices.get(n).pos,20, count);
                     //System.out.println("npos:" + n.pos + "v pos: " + v.pos);
                     edgesAnimations.add(linearTransform);
+
                 }
             }
             verticesAnimations.add(scaler);
@@ -97,11 +99,44 @@ public class AnimationScheduler {
 
         for(Animation e: edgesAnimations){
             addAnimation(e);
+            objects.add(e.getObject());
         }
         for(Animation v: verticesAnimations){
             addAnimation(v);
+            objects.add(v.getObject());
         }
 
+    }
+
+    public void moveToCircles(Graph graph, int numFrames, int startFrame){
+        animations.clear();
+        for (Vertex v: graph.getVertices()){
+            int Id = graph.getVertices().indexOf(v);
+            if (Id % 2 == 0 ){
+                double theta = ((Id/2) * 2 * Math.PI / 20);
+                System.out.println(Id/2);
+                Vector3d endVector = new Vector3d((3840/2-750)+110*Math.cos(theta),(2160/2)+110*Math.sin(theta),0);
+                //Vector3d endVector = new Vector3d(3840/2, 2160/2+ 100*Id,0);
+                createLinearAnimation(v,v.getPos(),endVector,numFrames, startFrame);
+                //createEaseOutAnimation(v,v.getPos(),endVector,numFrames, startFrame);
+
+                //v.setPos(endVector);
+            }
+            if (Id % 2 == 1 ){
+                double theta = ((Id/2) * 2 * Math.PI / 20);
+                System.out.println(Id/2);
+                //System.out.println(theta);
+                Vector3d endVector = new Vector3d((3840/2+750)+110*Math.cos(theta),(2160/2)+110*Math.sin(theta),0);
+                //createEaseOutAnimation(v,v.getPos(),endVector,numFrames, startFrame);
+                //v.setPos(endVector);
+                System.out.println(v.getPos());
+                createLinearAnimation(v,v.getPos(),endVector,numFrames, startFrame);
+                if (v.getPos() == null){
+                    System.out.println("We got him: "+ Id);
+                }
+                //System.out.println(endVector);
+            }
+        }
     }
 
     public void makeEdgesAppear(Graph graph){
@@ -133,7 +168,7 @@ public class AnimationScheduler {
         }
     }
     public void drawGraph(Graph graph){
-        animations.clear();
+        //animations.clear();
         objects.clear();
         //System.out.println(animations);
         ArrayList<Animation> edgesAnimations = new ArrayList<Animation>();
@@ -149,7 +184,8 @@ public class AnimationScheduler {
                 Animation noAniE = new NoAnimation(new EdgeLine(v.pos.x, v.pos.y, vertices.get(n).pos.x, vertices.get(n).pos.y));
                 edgesAnimations.add(noAniE);
             }
-            verticesAnimations.add(noAniV);
+            //verticesAnimations.add(noAniV);
+            objects.add(v);
 
             vNum += 1;
         }
@@ -158,13 +194,20 @@ public class AnimationScheduler {
             //System.out.println("animation added");
             addAnimation(e);
         }
-        for(Animation v: verticesAnimations){
-            addAnimation(v);
-        }
+//        for(Animation v: verticesAnimations){
+//            addAnimation(v);
+//        }
         //System.out.println(animations.size());
     }
 
+    public void scaleAllVertices(Graph graph,double endSize, int numFrames, int startFrame){
+        objects.clear();
+        for (Vertex v: graph.getVertices()) {
+            Animation scaler = new EaseInOutQuinScaler(v, startFrame, numFrames, v.getSize(), endSize);
+            addAnimation(scaler);
+        }
 
+    }
 
 
 }

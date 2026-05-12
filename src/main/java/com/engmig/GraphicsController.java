@@ -173,6 +173,7 @@ public class GraphicsController {
     private static FruchReinFDG FDG;
     private static boolean recording;
     private AdjacencyList graph;
+    private AdjacencyList graph2;
 
     private AnimationTimer recordingTimer;
     private static final long RECORD_INTERVAL_NS = 1_000_000_000L / 30; // 30fps
@@ -209,15 +210,19 @@ public class GraphicsController {
     }
 
     int count = 0;
-    int animationStart = 30;
-    int VIDEO_LENGTH = 300; // in Frames
+    int animationStart = 0;
+    int VIDEO_LENGTH = 150; // in Frames
 
     public void update() throws IOException {
+        System.out.println(count);
 
         if (count == 0) {
             graph = new AdjacencyList();
-            graph.makeNVerticesOnCircle(20, 3840 / 2, 2160 / 2, 750);
-            graph.addRandomEdges(100);
+            graph.makeNVerticesOnCircle(40, 3840 / 2, 2160 / 2, 750);
+            graph.addRandomEdgesOdd(20);
+            graph.addRandomEdgesEven(20);
+
+
             //animationScheduler.makeGraphAppear(graph);
             startRecording();
         }
@@ -237,9 +242,20 @@ public class GraphicsController {
 
         count += 1;
 
-        // Stop recording after animation finishes
-        if (count == 300 && isRecording) {
-            stopRecording();
+
+        if (count == 100  && isRecording) {
+            //animationScheduler.drawGraph(graph);
+            //animationScheduler.scaleAllVertices(graph, 100, 20, 150);
+            System.out.println("Here");
+            animationScheduler.moveToCircles(graph, 30,100);
+        }
+
+        if (count > 100){
+            animationScheduler.drawGraph(graph);
+        }
+
+        if (count == VIDEO_LENGTH+animationStart && isRecording) {
+            recorder.stop();
         }
     }
 

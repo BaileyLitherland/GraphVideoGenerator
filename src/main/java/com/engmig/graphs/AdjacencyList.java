@@ -106,6 +106,15 @@ public class AdjacencyList extends Graph{
         }
     }
 
+    @Override
+    public boolean isAdjacent(int x, int y) {
+        if (edges.get(x).contains(y)){
+            return true;
+        }
+        return false;
+    }
+
+
     public void addRandomEdges(int numE){
         int numV = getNumVertices();
         Random random = new Random();
@@ -120,13 +129,58 @@ public class AdjacencyList extends Graph{
         }
     }
 
-    @Override
-    public boolean isAdjacent(int x, int y) {
-        if (edges.get(x).contains(y)){
-            return true;
+    public void addRandomEdgesOdd(int numE){
+        int numV = getNumVertices();
+        Random random = new Random();
+        for(int i = 0; i < numE; i++ ){
+            int v1 = random.nextInt(numV);
+            int v2 = random.nextInt(numV);
+            if (v1 % 2 == 0){
+                v1++;
+            }
+            if (v2 % 2 == 0){
+                v2++;
+            }
+            while (v1 == v2 || isAdjacent(v1,v2)){
+                v1 = random.nextInt(numV);
+                v2 = random.nextInt(numV);
+                if (v1 % 2 == 0){
+                    v1++;
+                }
+                if (v2 % 2 == 0){
+                    v2++;
+                }
+            }
+            addEdge(v1,v2);
         }
-        return false;
     }
+
+    public void addRandomEdgesEven(int numE){
+        int numV = getNumVertices();
+        Random random = new Random();
+        for(int i = 0; i < numE; i++ ){
+            int v1 = random.nextInt(numV);
+            int v2 = random.nextInt(numV);
+            if (v1 % 2 == 1){
+                v1--;
+            }
+            if (v2 % 2 == 1){
+                v2--;
+            }
+            while (v1 == v2 || isAdjacent(v1,v2)){
+                v1 = random.nextInt(numV);
+                v2 = random.nextInt(numV);
+                if (v1 % 2 == 1){
+                    v1--;
+                }
+                if (v2 % 2 == 1){
+                    v2--;
+                }
+            }
+            addEdge(v1,v2);
+        }
+    }
+
 
     //  Vertex | Indices of adjacent Vertices
 //        0| [2,3]

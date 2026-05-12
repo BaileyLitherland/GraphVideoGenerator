@@ -35,16 +35,17 @@ public class LinearTransformation extends Transformation {
             if (frameNum == startFrame) {
                 object.setPos(startPosition);
             }
-            if (frameNum >= startFrame && frameNum - startFrame < numFrames){
+            if (frameNum >= startFrame && frameNum - startFrame <= numFrames){
                 // System.out.println(object);
                 // System.out.println("End Frame: " + numFrames + " Current Frame: " + frameNum);
                 object.move(new Vector3d(deltaX, deltaY,0));
-                object.draw(gc,frameNum);
+                //object.draw(gc,frameNum);
             }
 
-            if (frameNum > 0){
-                object.draw(gc,frameNum);
-            }
+//            if (frameNum > 0){
+//                // TODO: Remove this part and replace it in animation scheduler
+//                object.draw(gc,frameNum);
+//            }
 
         }
 

@@ -33,6 +33,7 @@ public class EaseOutCubicTransformation extends Transformation {
     private double easeOutCubic(double x){
         return 1 - Math.pow(1 - x, 3);
     }
+
     public void update(GraphicsContext gc, int frameNum){
 
         if (frameNum == startFrame) {
@@ -40,6 +41,7 @@ public class EaseOutCubicTransformation extends Transformation {
             //System.out.println("ease out cubic update, frame num, startFrame:" + frameNum + " " +startFrame);
             object.setPos(startPosition);
         }
+        System.out.println(endPosition);
         if (frameNum > startFrame && frameNum - startFrame < numFrames){
             //System.out.println("ease out cubic update, frame num, startFrame:" + frameNum + " " +startFrame);
             object.move(new Vector3d(
@@ -49,7 +51,7 @@ public class EaseOutCubicTransformation extends Transformation {
         }
 
         if (frameNum > startFrame){
-            object.draw(gc,frameNum);
+            //object.draw(gc,frameNum);
         }
 
     }
