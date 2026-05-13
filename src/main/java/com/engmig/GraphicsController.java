@@ -159,6 +159,7 @@ package com.engmig;
 
 import com.engmig.FDGSolvers.FruchReinFDG;
 import com.engmig.animations.EaseOutCubic;
+import com.engmig.animations.Scalers.Scaler;
 import com.engmig.animations.Transformations.TranslateTo;
 import com.engmig.graphs.AdjacencyList;
 import javafx.animation.AnimationTimer;
@@ -217,8 +218,6 @@ public class GraphicsController {
     int VIDEO_LENGTH = 150; // in Frames
 
     public void update() throws IOException {
-        System.out.println(count);
-
         if (count == 0) {
 //            graph = new AdjacencyList();
 //            graph.makeNVerticesOnCircle(40, 3840 / 2, 2160 / 2, 750);
@@ -228,17 +227,10 @@ public class GraphicsController {
             Vertex v1 = new Vertex(100,100);
             TranslateTo t = animationScheduler.translateTo(v1,endPos1,100,10);
             t.setFunction(new EaseOutCubic());
-            //animationScheduler.makeGraphAppear(graph);
+            Scaler s = animationScheduler.scale(v1,10,100,10,100 );
+            s.setFunction(new EaseOutCubic());
             startRecording();
         }
-
-        if (count == animationStart && isRecording ){
-            // System.out.println("starting animation at:" + animationStart +" "+ count);
-//            animationScheduler.makeGraphAppear(graph);
-        }
-        // Clear and draw canvas first
-//        gc.setFill(Color.web("#2B2B2B"));
-//        gc.fillRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
 
         if (count < VIDEO_LENGTH + animationStart && count > animationStart && isRecording) {
             animationScheduler.update(gc);
@@ -257,26 +249,6 @@ public class GraphicsController {
         isRecording = true;
         recorder.start();
 
-        // Recording timer runs independently from the animation loop
-//        recordingTimer = new AnimationTimer() {
-//            @Override
-//            public void handle(long now) {
-//                if (!isRecording) {
-//                    stop(); // stop this timer if recording stopped
-//                    return;
-//                }
-//                if (now - lastRecordTime >= RECORD_INTERVAL_NS) {
-//                    try {
-//                        recorder.record(gc.getCanvas());
-//
-//                        lastRecordTime = now;
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            }
-//        };
-//        recordingTimer.start();
     }
 
     public void stopRecording() {

@@ -36,23 +36,16 @@ public class TranslateTo extends com.engmig.animations.Animation {
     }
 
     public void update(GraphicsContext gc, int frameNum){
-
         Vector3d moveVector = new Vector3d(0,0,0);
         moveVector.scale(function.function(((double)(frameNum-startFrame)/(double)numFrames)), SE);
-        System.out.println("Scaled Move Vector" + moveVector);
         moveVector.add(startPosition);
         object.setPos(moveVector);
-        System.out.println(moveVector);
+
     }
 
     @Override
     public Drawable getObject() {
         return object;
-    }
-
-    @Override
-    public void setFunction() {
-
     }
 
     @Override

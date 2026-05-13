@@ -3,6 +3,7 @@ package com.engmig;
 import com.engmig.animations.Animation;
 import com.engmig.animations.NoAnimation;
 import com.engmig.animations.Scalers.EaseInOutQuinScaler;
+import com.engmig.animations.Scalers.Scaler;
 import com.engmig.animations.Transformations.EaseOutCubicTranslateTo;
 import com.engmig.animations.Transformations.LinearTranslateTo;
 import com.engmig.animations.Transformations.TranslateTo;
@@ -218,6 +219,13 @@ public class AnimationScheduler {
 
     public TranslateTo translateTo(Drawable object, Vector3d endPos, int numFrames, int startFrame ){
         TranslateTo animation = new TranslateTo(object, endPos, numFrames, startFrame);
+        animations.add(animation);
+        objects.add(object);
+        return animation;
+    }
+
+    public Scaler scale(Drawable object, int startFrame, int numFrames, double startSize, double endSize){
+        Scaler animation = new Scaler(object,  startFrame,  numFrames, startSize,endSize);
         animations.add(animation);
         objects.add(object);
         return animation;

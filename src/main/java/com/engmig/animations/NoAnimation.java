@@ -20,7 +20,7 @@ public class NoAnimation extends Animation {
     }
 
     @Override
-    public void setFunction() {
+    public void setFunction(Function function) {
 
     }
 

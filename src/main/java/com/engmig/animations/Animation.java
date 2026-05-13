@@ -9,7 +9,7 @@ public abstract class Animation {
 
     public abstract Drawable getObject();
 
-    public abstract void setFunction();
+    public abstract void setFunction(Function function);
 
     public abstract int getEndFrame();
 }

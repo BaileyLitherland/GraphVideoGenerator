@@ -37,10 +37,7 @@ public class EaseInOutQuinScaler extends Scaler {
         return object;
     }
 
-    @Override
-    public void setFunction() {
 
-    }
 
     @Override
     public int getEndFrame() {
