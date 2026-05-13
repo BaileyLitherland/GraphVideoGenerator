@@ -158,7 +158,9 @@
 package com.engmig;
 
 import com.engmig.FDGSolvers.FruchReinFDG;
+import com.engmig.animations.EasingFunctions.EaseInBounce;
 import com.engmig.animations.EasingFunctions.EaseInOutElastic;
+import com.engmig.animations.EasingFunctions.EaseOutBounce;
 import com.engmig.animations.EasingFunctions.EaseOutCubic;
 import com.engmig.animations.Scaler;
 import com.engmig.animations.TranslateTo;
@@ -227,8 +229,12 @@ public class GraphicsController {
             Vertex v1 = new Vertex(100,100);
 //            TranslateTo t = animationScheduler.translateTo(v1,endPos1,100,10);
 //            t.setFunction(new EaseOutCubic());
-            Scaler s = animationScheduler.scale(v1,10,100,10,100 );
-            s.setFunction(new EaseInOutElastic());
+            Scaler s = animationScheduler.scale(v1,10,20,10,100 );
+            s.setFunction(new EaseInBounce());
+
+            Vertex v2 = new Vertex(300,300);
+            Scaler s1 = animationScheduler.scale(v2,10,20,10,100 );
+            s1.setFunction(new EaseOutBounce());
             startRecording();
         }
 
