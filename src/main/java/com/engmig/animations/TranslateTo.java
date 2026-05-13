@@ -2,13 +2,14 @@ package com.engmig.animations;
 
 import com.engmig.Drawable;
 import com.engmig.animations.EasingFunctions.Function;
+import com.engmig.animations.EasingFunctions.Linear;
 import javafx.scene.canvas.GraphicsContext;
 
 import javax.vecmath.Vector3d;
 
 public class TranslateTo extends com.engmig.animations.Animation {
     final private Drawable object;
-    private Function function;
+    private Function function = new Linear();
     private Vector3d startPosition;
     private Vector3d endPosition;
     private int numFrames;
@@ -32,7 +33,6 @@ public class TranslateTo extends com.engmig.animations.Animation {
         this.numFrames = numFrames;
         this.startFrame = startFrame;
         SE.sub(this.endPosition, this.startPosition);
-        System.out.println("Base Vectors"+endPosition + startPosition + SE);
     }
 
     public void update(GraphicsContext gc, int frameNum){

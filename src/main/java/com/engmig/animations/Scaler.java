@@ -2,6 +2,7 @@ package com.engmig.animations;
 
 import com.engmig.Drawable;
 import com.engmig.animations.EasingFunctions.Function;
+import com.engmig.animations.EasingFunctions.Linear;
 import javafx.scene.canvas.GraphicsContext;
 
 public class Scaler extends Animation {
@@ -10,7 +11,7 @@ public class Scaler extends Animation {
     int numFrames;
     double startSize;
     double endSize;
-    Function function;
+    Function function = new Linear();
 
     public Scaler(Drawable object, int startFrame, int numFrames, double startSize, double endSize){
         this.object = object;
