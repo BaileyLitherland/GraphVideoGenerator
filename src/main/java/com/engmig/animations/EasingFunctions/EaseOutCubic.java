@@ -1,6 +1,6 @@
-package com.engmig.animations;
+package com.engmig.animations.EasingFunctions;
 
-public class EaseOutCubic extends Function{
+public class EaseOutCubic extends Function {
 
     @Override
     public Double function(Double x) {

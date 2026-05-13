@@ -1,6 +1,7 @@
 package com.engmig.animations;
 
 import com.engmig.Drawable;
+import com.engmig.animations.EasingFunctions.Function;
 import javafx.scene.canvas.GraphicsContext;
 
 public abstract class Animation {

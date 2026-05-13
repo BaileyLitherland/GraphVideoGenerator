@@ -1,7 +1,7 @@
-package com.engmig.animations.Transformations;
+package com.engmig.animations;
 
 import com.engmig.Drawable;
-import com.engmig.animations.Function;
+import com.engmig.animations.EasingFunctions.Function;
 import javafx.scene.canvas.GraphicsContext;
 
 import javax.vecmath.Vector3d;

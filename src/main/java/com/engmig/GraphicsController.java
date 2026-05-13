@@ -158,13 +158,13 @@
 package com.engmig;
 
 import com.engmig.FDGSolvers.FruchReinFDG;
-import com.engmig.animations.EaseOutCubic;
-import com.engmig.animations.Scalers.Scaler;
-import com.engmig.animations.Transformations.TranslateTo;
+import com.engmig.animations.EasingFunctions.EaseInOutElastic;
+import com.engmig.animations.EasingFunctions.EaseOutCubic;
+import com.engmig.animations.Scaler;
+import com.engmig.animations.TranslateTo;
 import com.engmig.graphs.AdjacencyList;
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
 
 import javax.vecmath.Vector3d;
 import java.io.IOException;
@@ -225,10 +225,10 @@ public class GraphicsController {
 //            graph.addRandomEdgesEven(20);
             Vector3d endPos1 = new Vector3d(1000,1000,0);
             Vertex v1 = new Vertex(100,100);
-            TranslateTo t = animationScheduler.translateTo(v1,endPos1,100,10);
-            t.setFunction(new EaseOutCubic());
+//            TranslateTo t = animationScheduler.translateTo(v1,endPos1,100,10);
+//            t.setFunction(new EaseOutCubic());
             Scaler s = animationScheduler.scale(v1,10,100,10,100 );
-            s.setFunction(new EaseOutCubic());
+            s.setFunction(new EaseInOutElastic());
             startRecording();
         }
 

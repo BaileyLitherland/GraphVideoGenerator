@@ -1,11 +1,8 @@
-package com.engmig.animations.Scalers;
+package com.engmig.animations;
 
 import com.engmig.Drawable;
-import com.engmig.animations.Animation;
-import com.engmig.animations.Function;
+import com.engmig.animations.EasingFunctions.Function;
 import javafx.scene.canvas.GraphicsContext;
-
-import javax.vecmath.Vector3d;
 
 public class Scaler extends Animation {
     Drawable object;
@@ -25,7 +22,6 @@ public class Scaler extends Animation {
 
     public void update(GraphicsContext gc, int frameNum){
         double sizeDifference = endSize - startSize;
-        System.out.println(startSize + (function.function(((double)(frameNum-startFrame)/(double)numFrames)) * sizeDifference));
         object.setSize(startSize + (function.function(((double)(frameNum-startFrame)/(double)numFrames)) * sizeDifference)); // Refactor please oml
     }
 

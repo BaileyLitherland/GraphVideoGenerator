@@ -1,13 +1,9 @@
 package com.engmig;
 
 import com.engmig.animations.Animation;
-import com.engmig.animations.NoAnimation;
-import com.engmig.animations.Scalers.EaseInOutQuinScaler;
-import com.engmig.animations.Scalers.Scaler;
-import com.engmig.animations.Transformations.EaseOutCubicTranslateTo;
-import com.engmig.animations.Transformations.LinearTranslateTo;
-import com.engmig.animations.Transformations.TranslateTo;
-import com.engmig.graphs.Graph;
+import com.engmig.animations.Scaler;
+
+import com.engmig.animations.TranslateTo;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
@@ -38,16 +34,6 @@ public class AnimationScheduler {
     public void addAnimationToStart(Animation animation){
         animations.add(0,animation);
         objects.add(0,animation.getObject());
-    }
-
-    public void createLinearAnimation(Drawable object, Vector3d startPosition, Vector3d endPosition, int numFrames, int startFrame){
-        LinearTranslateTo animation = new LinearTranslateTo(object,startPosition, endPosition, numFrames, startFrame);
-        addAnimation(animation);
-    }
-
-    public void createEaseOutAnimation(Drawable object, Vector3d startPosition, Vector3d endPosition, int numFrames, int startFrame){
-        EaseOutCubicTranslateTo animation = new EaseOutCubicTranslateTo(object,startPosition, endPosition, numFrames, startFrame);
-        addAnimation(animation);
     }
 
     public void update(GraphicsContext gc){
