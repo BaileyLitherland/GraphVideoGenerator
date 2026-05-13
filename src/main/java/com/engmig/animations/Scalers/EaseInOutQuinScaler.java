@@ -1,10 +1,7 @@
 package com.engmig.animations.Scalers;
 
 import com.engmig.Drawable;
-import com.engmig.animations.Transformations.Transformation;
 import javafx.scene.canvas.GraphicsContext;
-
-import javax.vecmath.Vector3d;
 
 public class EaseInOutQuinScaler extends Scaler {
     double sizeDiff;
@@ -38,6 +35,16 @@ public class EaseInOutQuinScaler extends Scaler {
 
     public Drawable getObject() {
         return object;
+    }
+
+    @Override
+    public void setFunction() {
+
+    }
+
+    @Override
+    public int getEndFrame() {
+        return 0;
     }
 
     private double easeInOutQuint(double x){

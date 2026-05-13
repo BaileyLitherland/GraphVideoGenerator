@@ -1,0 +1,68 @@
+package com.engmig.animations.Transformations;
+
+import com.engmig.Drawable;
+import com.engmig.animations.Function;
+import javafx.scene.canvas.GraphicsContext;
+
+import javax.vecmath.Vector3d;
+
+public class TranslateTo extends com.engmig.animations.Animation {
+    final private Drawable object;
+    private Function function;
+    private Vector3d startPosition;
+    private Vector3d endPosition;
+    private int numFrames;
+    private int startFrame;
+    private Vector3d SE = new Vector3d();
+
+    public TranslateTo(Drawable object, Vector3d startPosition, Vector3d endPosition, int numFrames, int startFrame){
+        this.object = object;
+        this.startPosition = startPosition;
+        this.endPosition = endPosition;
+        this.numFrames = numFrames;
+        this.startFrame = startFrame;
+//        SE.sub(endPosition, startPosition);
+
+    }
+
+    public TranslateTo(Drawable object, Vector3d endPosition, int numFrames, int startFrame){
+        this.object = object;
+        this.startPosition = object.getPos();
+        this.endPosition = endPosition;
+        this.numFrames = numFrames;
+        this.startFrame = startFrame;
+        SE.sub(this.endPosition, this.startPosition);
+        System.out.println("Base Vectors"+endPosition + startPosition + SE);
+    }
+
+    public void update(GraphicsContext gc, int frameNum){
+
+        Vector3d moveVector = new Vector3d(0,0,0);
+        moveVector.scale(function.function(((double)(frameNum-startFrame)/(double)numFrames)), SE);
+        System.out.println("Scaled Move Vector" + moveVector);
+        moveVector.add(startPosition);
+        object.setPos(moveVector);
+        System.out.println(moveVector);
+    }
+
+    @Override
+    public Drawable getObject() {
+        return object;
+    }
+
+    @Override
+    public void setFunction() {
+
+    }
+
+    @Override
+    public int getEndFrame() {
+        return startFrame + numFrames;
+    }
+
+    public void setFunction(Function function) {
+        this.function = function;
+    }
+
+
+}

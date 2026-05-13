@@ -158,11 +158,14 @@
 package com.engmig;
 
 import com.engmig.FDGSolvers.FruchReinFDG;
+import com.engmig.animations.EaseOutCubic;
+import com.engmig.animations.Transformations.TranslateTo;
 import com.engmig.graphs.AdjacencyList;
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
+import javax.vecmath.Vector3d;
 import java.io.IOException;
 
 public class GraphicsController {
@@ -217,19 +220,21 @@ public class GraphicsController {
         System.out.println(count);
 
         if (count == 0) {
-            graph = new AdjacencyList();
-            graph.makeNVerticesOnCircle(40, 3840 / 2, 2160 / 2, 750);
-            graph.addRandomEdgesOdd(20);
-            graph.addRandomEdgesEven(20);
-
-
+//            graph = new AdjacencyList();
+//            graph.makeNVerticesOnCircle(40, 3840 / 2, 2160 / 2, 750);
+//            graph.addRandomEdgesOdd(20);
+//            graph.addRandomEdgesEven(20);
+            Vector3d endPos1 = new Vector3d(1000,1000,0);
+            Vertex v1 = new Vertex(100,100);
+            TranslateTo t = animationScheduler.translateTo(v1,endPos1,100,10);
+            t.setFunction(new EaseOutCubic());
             //animationScheduler.makeGraphAppear(graph);
             startRecording();
         }
 
         if (count == animationStart && isRecording ){
             // System.out.println("starting animation at:" + animationStart +" "+ count);
-            animationScheduler.makeGraphAppear(graph);
+//            animationScheduler.makeGraphAppear(graph);
         }
         // Clear and draw canvas first
 //        gc.setFill(Color.web("#2B2B2B"));
@@ -241,18 +246,6 @@ public class GraphicsController {
         }
 
         count += 1;
-
-
-        if (count == 100  && isRecording) {
-            //animationScheduler.drawGraph(graph);
-            //animationScheduler.scaleAllVertices(graph, 100, 20, 150);
-            System.out.println("Here");
-            animationScheduler.moveToCircles(graph, 30,100);
-        }
-
-        if (count > 100){
-            animationScheduler.drawGraph(graph);
-        }
 
         if (count == VIDEO_LENGTH+animationStart && isRecording) {
             recorder.stop();

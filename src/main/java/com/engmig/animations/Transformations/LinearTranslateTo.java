@@ -5,7 +5,7 @@ import javafx.scene.canvas.GraphicsContext;
 
 import javax.vecmath.Vector3d;
 
-public class LinearTransformation extends Transformation {
+public class LinearTranslateTo extends TranslateTo {
 
         // From the abstract animation class
         Drawable object;
@@ -19,7 +19,7 @@ public class LinearTransformation extends Transformation {
         double deltaX;
         double deltaY;
 
-        public LinearTransformation(Drawable object, Vector3d startPosition, Vector3d endPosition, int numFrames, int startFrame){
+        public LinearTranslateTo(Drawable object, Vector3d startPosition, Vector3d endPosition, int numFrames, int startFrame){
             super(object,startPosition, endPosition, numFrames, startFrame);
             this.object = object;
             this.numFrames = numFrames;

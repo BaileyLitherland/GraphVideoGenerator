@@ -40,6 +40,11 @@ public class EdgeLine implements Drawable{
 
     }
 
+    @Override
+    public Vector3d getPos() {
+        return null;
+    }
+
     public void setSize(double size) {
 
     }

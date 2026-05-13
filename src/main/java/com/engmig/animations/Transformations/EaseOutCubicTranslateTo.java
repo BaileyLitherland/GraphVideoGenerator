@@ -5,7 +5,7 @@ import javafx.scene.canvas.GraphicsContext;
 
 import javax.vecmath.Vector3d;
 
-public class EaseOutCubicTransformation extends Transformation {
+public class EaseOutCubicTranslateTo extends TranslateTo {
     // From the abstract animation class
     Drawable object;
     Vector3d startPosition;
@@ -18,7 +18,7 @@ public class EaseOutCubicTransformation extends Transformation {
     double deltaX;
     double deltaY;
 
-    public EaseOutCubicTransformation(Drawable object, Vector3d startPosition, Vector3d endPosition, int numFrames, int startFrame) {
+    public EaseOutCubicTranslateTo(Drawable object, Vector3d startPosition, Vector3d endPosition, int numFrames, int startFrame) {
         super(object, startPosition, endPosition, numFrames, startFrame);
         this.object = object;
         this.numFrames = numFrames;

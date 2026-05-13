@@ -18,4 +18,14 @@ public class NoAnimation extends Animation {
     public Drawable getObject() {
         return object;
     }
+
+    @Override
+    public void setFunction() {
+
+    }
+
+    @Override
+    public int getEndFrame() {
+        return 0;
+    }
 }
