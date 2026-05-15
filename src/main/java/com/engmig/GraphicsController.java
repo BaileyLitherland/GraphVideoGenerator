@@ -248,13 +248,13 @@ public class GraphicsController {
 //
             //animationScheduler.translateTo(v1, endPos1,10,0);
 
-            animationScheduler.makeGraphAppear(graph, 150,10,20);
+            animationScheduler.makeGraphAppear(graph, 200,0,20);
 
-            animationScheduler.moveToCircles(graph,50,170);
+            animationScheduler.moveToCircles(graph,50,200);
             startRecording();
         }
 
-        if (count == 170){
+        if (count == 200){
             animationScheduler.drawGraph(graph);
         }
 
