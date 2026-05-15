@@ -217,31 +217,53 @@ public class GraphicsController {
 
     int count = 0;
     int animationStart = 0;
-    int VIDEO_LENGTH = 150; // in Frames
+    int VIDEO_LENGTH = 230; // in Frames
 
     public void update() throws IOException {
         if (count == 0) {
-//            graph = new AdjacencyList();
-//            graph.makeNVerticesOnCircle(40, 3840 / 2, 2160 / 2, 750);
-//            graph.addRandomEdgesOdd(20);
-//            graph.addRandomEdgesEven(20);
-            Vector3d endPos1 = new Vector3d(1000,1000,0);
-            Vertex v1 = new Vertex(100,100);
-//            TranslateTo t = animationScheduler.translateTo(v1,endPos1,100,10);
-//            t.setFunction(new EaseOutCubic());
-            Scaler s = animationScheduler.scale(v1,10,20,10,100 );
-            s.setFunction(new EaseInBounce());
+            graph = new AdjacencyList();
+            graph.makeNVerticesOnCircle(100, 3840 / 2, 2160 / 2, 750);
+            graph.addRandomEdgesEven(20);
+            graph.addRandomEdgesOdd(45);
+//            graph.addRandomEdgesOdd(0);
+//            graph.addRandomEdgesEven(0);
 
-            Vertex v2 = new Vertex(300,300);
-            Scaler s1 = animationScheduler.scale(v2,10,20,10,100 );
-            s1.setFunction(new EaseOutBounce());
+
+//            Vector3d endPos1 = new Vector3d(1000,1000,0);
+//            Vertex v1 = new Vertex(100,100);
+//            TranslateTo t = animationScheduler.translateTo(v1,endPos1,100,10);
+//           t.setFunction(new EaseOutCubic());
+//
+//            Vector3d endPos2 = new Vector3d(100,100,0);
+//
+//            TranslateTo t2 = animationScheduler.translateTo(v1,endPos1,endPos2,50,110);
+//            t2.setFunction(new EaseOutCubic());
+
+//            Scaler s = animationScheduler.scale(v1,10,20,10,100 );
+//            s.setFunction(new EaseInBounce());
+//
+//            Vertex v2 = new Vertex(300,300);
+//            Scaler s1 = animationScheduler.scale(v2,10,20,10,100 );
+//            s1.setFunction(new EaseOutBounce());
+//
+            //animationScheduler.translateTo(v1, endPos1,10,0);
+
+            animationScheduler.makeGraphAppear(graph, 150,10,20);
+
+            animationScheduler.moveToCircles(graph,50,170);
             startRecording();
         }
+
+        if (count == 170){
+            animationScheduler.drawGraph(graph);
+        }
+
 
         if (count < VIDEO_LENGTH + animationStart && count > animationStart && isRecording) {
             animationScheduler.update(gc);
             recorder.record(gc.getCanvas());
         }
+
 
         count += 1;
 
