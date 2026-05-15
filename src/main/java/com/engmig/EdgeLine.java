@@ -13,38 +13,50 @@ public class EdgeLine implements Drawable{
     double y2;
     Vertex v1;
     Vertex v2;
-
-    public EdgeLine(double x1, double y1, double x2, double y2){
-        this.x1 = x1;
-        this.y1 = y1;
-        this.x2 = x2;
-        this.y2 = y2;
+    Vector3d endOfLine;
+    double width = 5;
+    public EdgeLine(Vertex v1, Vertex v2){
+        this.v1 = v1;
+        this.v2 = v2;
+        this.endOfLine = v2.getPos();
+        //System.out.println("v1/v2 in the edgeline class: " + v1 + v2);
     }
 
     public void draw(GraphicsContext gc, int frameNum) {
-
-        if (x1 != x2 || y1 != y2) {
+        //System.out.println("v1/v2 in the edgeline draw: " + v1 + v2);
+        if (v1.getPos().x != endOfLine.x || v1.getPos().y != endOfLine.y) {
 
             gc.setStroke(Paint.valueOf("#4E4D80"));
-            gc.setLineWidth(5);
-            gc.strokeLine(x1, y1, x2, y2);
+            gc.setLineWidth(width);
+            gc.strokeLine(v1.getPos().x, v1.getPos().y, endOfLine.x, endOfLine.y);
+            //gc.strokeLine(v1.getPos().x, v1.getPos().y, v2.getPos().x, v2.getPos().y);
+
+//            System.out.println("v1 / v2: " + v1 + " / " + v2);
         }
     }
 
     public void move(Vector3d moveVector) {
-        this.x2 -= moveVector.x;
-        this.y2 -= moveVector.y;
+        //v2.add(moveVector);
     }
 
     public void setPos(Vector3d pos) {
+        endOfLine = pos;
+    }
 
+    @Override
+    public Vector3d getPos() {
+        return v1.getPos();
     }
 
     public void setSize(double size) {
-
+        width = size;
     }
 
     public double getSize() {
-        return 0;
+        return width;
+    }
+
+    public void setEndOfLine(Vector3d pos){
+        endOfLine = pos;
     }
 }

@@ -2,8 +2,6 @@ package com.engmig;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import org.jcodec.containers.mp4.SampleOffsetUtils;
-import org.jcodec.scale.ColorUtil;
 
 import javax.vecmath.Vector3d;
 public class Vertex implements Drawable {
@@ -60,4 +58,9 @@ public class Vertex implements Drawable {
     public void addDisp(Vector3d v){
         disp.add(v);
     }
+
+
+
+
+
 }
