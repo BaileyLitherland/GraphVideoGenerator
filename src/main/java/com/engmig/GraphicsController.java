@@ -158,6 +158,7 @@
 package com.engmig;
 
 import com.engmig.FDGSolvers.FruchReinFDG;
+import com.engmig.FDGSolvers.NaiveFDG;
 import com.engmig.animations.EasingFunctions.EaseInBounce;
 import com.engmig.animations.EasingFunctions.EaseInOutElastic;
 import com.engmig.animations.EasingFunctions.EaseOutBounce;
@@ -217,23 +218,30 @@ public class GraphicsController {
 
     int count = 0;
     int animationStart = 0;
-    int VIDEO_LENGTH = 500; // in Frames
-
+    int VIDEO_LENGTH = 150; // in Frames
+    NaiveFDG solver = new NaiveFDG();
     public void update() throws IOException {
         if (count == 0) {
             graph = new AdjacencyList();
-            graph.makeNVerticesOnCircle(100, 3840 / 2, 2160 / 2, 750);
-            graph.addRandomEdgesEven(100);
-            graph.addRandomEdgesOdd(100);
-
-            animationScheduler.makeGraphAppear(graph, 250,10,20);
-
-            animationScheduler.moveToCircles(graph,200,280);
+            Vertex v1 = new Vertex((3840/2)+750,2180/2);
+            Vertex v2 = new Vertex(3840/2-750,2180/2);
+            graph.addVertex(v1);
+            graph.addVertex(v2);
+//            animationScheduler.makeGraphAppear(graph,30,10,200);
+//            TranslateTo t = animationScheduler.translateTo(v1,new Vector3d(500,500,0),50,10);
+////            TranslateTo t2 = animationScheduler.translateTo(v2,new Vector3d(1250,500,0),50,10);
+//            t.setFunction(new EaseOutBounce());
+//            t2.setFunction(new EaseOutBounce());
+            graph.addEdge(0,1);
+            animationScheduler.makeGraphAppear(graph,30,10,200);
+//            animationScheduler.drawGraph(graph);
             startRecording();
         }
 
-        if (count == 270){
+        if (count >55) {
             animationScheduler.drawGraph(graph);
+            NaiveFDG solver = new NaiveFDG();
+            solver.update(graph);
         }
 
         if (count < VIDEO_LENGTH + animationStart && count > animationStart && isRecording) {
