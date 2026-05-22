@@ -53,8 +53,10 @@ public class GraphicsRecorder {
             recorder = new FFmpegFrameRecorder("output.mp4", 3840, 2160);
             recorder.setFormat("mp4");
             recorder.setFrameRate(30);
-            recorder.setVideoBitrate(20_000_000);
+            recorder.setVideoBitrate(20000000);
             recorder.setVideoCodec(avcodec.AV_CODEC_ID_H264);
+            recorder.setGopSize(15);
+            recorder.setVideoOption("bf", "0");
             recorder.setPixelFormat(avutil.AV_PIX_FMT_YUV420P);
 
             FFmpegLogCallback.set();

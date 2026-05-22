@@ -62,7 +62,7 @@ public class AnimationScheduler {
         int vertexScaleTime = numFrames/(numV + 1);
         for (int i = 0; i < numV; i++){
             Vertex v = graph.getVertices().get(i);
-            Scaler s = new Scaler(v, startFrame + currentFrameNum * (vertexScaleTime/2)
+            Scaler s = new Scaler(v, startFrame + currentFrameNum * (vertexScaleTime)
                     , vertexScaleTime, 0, vertexSize );
             s.setFunction(new EaseOutCubic());
             animations.add(s);
@@ -75,7 +75,7 @@ public class AnimationScheduler {
                     EdgeLine edge = new EdgeLine(v, u);
                     edge.setEndOfLine(v.getPos());
                     //System.out.println("end pos in animation make graph appear method"  + u.getPos());
-                    TranslateTo t = new TranslateTo(edge, u.getPos(), vertexScaleTime*2,startFrame + currentFrameNum * (vertexScaleTime/2)+ vertexScaleTime);
+                    TranslateTo t = new TranslateTo(edge, u.getPos(), vertexScaleTime*2,startFrame + currentFrameNum * (vertexScaleTime)+ vertexScaleTime);
                     t.setFunction(new EaseOutCubic());
                     animations.add(t);
 
