@@ -6,13 +6,16 @@ import javax.vecmath.Vector3d;
 
 public interface Drawable {
 
-    public void draw(GraphicsContext gc, int frameNum);
+    void draw(GraphicsContext gc, int frameNum);
 
-    public void move(Vector3d moveVector);
+    void move(Vector3d moveVector);
 
-    public void setPos(Vector3d pos);
+    void setPos(Vector3d pos);
 
-    public void setSize(double size);
+    Vector3d getPos();
 
-    public double getSize();
+    void setSize(double size);
+
+    double getSize();
+
 }

@@ -2,18 +2,18 @@ package com.engmig;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import org.jcodec.containers.mp4.SampleOffsetUtils;
-import org.jcodec.scale.ColorUtil;
 
 import javax.vecmath.Vector3d;
 public class Vertex implements Drawable {
     Vector3d pos;
-    double radius = 50;
+    double radius = 20;
     Color colour = Color.DARKKHAKI;
-
+    Vector3d disp;
     public Vertex(double x, double y){
         pos = new Vector3d(x,y,0);
     }
+
+
 
     public Vertex(){
         pos = new Vector3d();
@@ -46,6 +46,21 @@ public class Vertex implements Drawable {
     public double getSize(){
         return radius;
     }
+
+    public void setDisp(Vector3d d){
+        disp = d;
+    }
+
+    public Vector3d getDisp(){
+        return disp;
+    }
+
+    public void addDisp(Vector3d v){
+        disp.add(v);
+    }
+
+
+
 
 
 }
