@@ -29,6 +29,8 @@ public abstract class Graph {
 
     public abstract boolean isAdjacent(int x, int y);
 
+    public abstract boolean isAdjacent(Vertex x, Vertex y);
+
 }
 
 

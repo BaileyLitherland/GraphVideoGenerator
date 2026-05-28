@@ -114,6 +114,16 @@ public class AdjacencyList extends Graph{
         return false;
     }
 
+    @Override
+    public boolean isAdjacent(Vertex x, Vertex y) {
+        int indexX = vertices.indexOf(x);
+        int indexY = vertices.indexOf(y);
+        if (edges.get(indexX).contains(indexY)){
+            return true;
+        }
+        return false;
+    }
+
 
     public void addRandomEdges(int numE){
         int numV = getNumVertices();
@@ -180,6 +190,7 @@ public class AdjacencyList extends Graph{
             addEdge(v1,v2);
         }
     }
+
 
 
     //  Vertex | Indices of adjacent Vertices
