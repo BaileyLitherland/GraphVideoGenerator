@@ -14,10 +14,11 @@ public class NaiveFDG {
 
     }
 
-    private final int RESTING_LENGTH = 750;
+    private final int RESTING_LENGTH = 500;
+    private final double REPELLING_FORCE = 1000000;
 
     public Vector3d attractiveForce(Vertex v, Vertex u){
-        // Hooks law, force = -kx := k is the spring constant, and x is the displacement from resting position
+        // Hooks law, force = -kx where k is the spring constant, and x is the displacement from resting position
 
         // Get the vector from v to u.
         Vector3d vu = new Vector3d();
@@ -38,12 +39,30 @@ public class NaiveFDG {
         return vu;
     }
 
+    public Vector3d repulsiveForce(Vertex v, Vertex u){
+        // Coulombs law; force = k * (q1*q2)/r^2
+        // Get the vector from v to u.
+        Vector3d vu = new Vector3d();
+        vu.sub(u.getPos(),v.getPos());
+        // Get length of VU squared
+        double x = vu.lengthSquared();
+
+        vu.normalize();
+        vu.scale(-REPELLING_FORCE/x); // Assumes q1 and q2 is just 1
+
+        return vu;
+    }
+
     public void update(Graph graph){
         for (Vertex v: graph.getVertices()){
-            ArrayList<Integer> neighbours = graph.getNeighbours(v);
-            for (int index: neighbours){
-                Vertex u = graph.getVertex(index);
-                u.move(attractiveForce(v,u));
+            for (Vertex u: graph.getVertices()){
+                if (u != v) {
+                    if (graph.isAdjacent(v, u)) {
+                        v.move(attractiveForce(u, v));
+                    } else {
+                        v.move(repulsiveForce(v, u));
+                    }
+                }
             }
         }
     }
