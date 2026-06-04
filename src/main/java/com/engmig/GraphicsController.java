@@ -218,13 +218,15 @@ public class GraphicsController {
 
     int count = 0;
     int animationStart = 0;
-    int VIDEO_LENGTH = 150; // in Frames
+    int VIDEO_LENGTH = 1200; // in Frames
     NaiveFDG solver = new NaiveFDG();
     public void update() throws IOException {
         if (count == 0) {
+            NaiveFDG solver = new NaiveFDG();
             graph = new AdjacencyList();
-            Vertex v1 = new Vertex((3840/2)+750,2180/2);
-            Vertex v2 = new Vertex(3840/2-750,2180/2);
+            Vertex v1 = new Vertex((3840/2),2180/2 + 150);
+            Vertex v2 = new Vertex(3840/2,2180/2 - 150);
+//            graph.makeNVerticesOnCircle(2,3840/2,2180/2,750);
             graph.addVertex(v1);
             graph.addVertex(v2);
 //            animationScheduler.makeGraphAppear(graph,30,10,200);
@@ -232,17 +234,38 @@ public class GraphicsController {
 ////            TranslateTo t2 = animationScheduler.translateTo(v2,new Vector3d(1250,500,0),50,10);
 //            t.setFunction(new EaseOutBounce());
 //            t2.setFunction(new EaseOutBounce());
-            graph.addEdge(0,1);
-            animationScheduler.makeGraphAppear(graph,30,10,200);
-//            animationScheduler.drawGraph(graph);
+//            graph.addEdge(0,1);
+            animationScheduler.makeGraphAppear(graph,90,10,200);
+            //animationScheduler.drawGraph(graph);
             startRecording();
         }
+//        if (count == 70){
+////            animationScheduler.drawGraph(graph);
+////        }
 
-        if (count >55) {
-            animationScheduler.drawGraph(graph);
-            NaiveFDG solver = new NaiveFDG();
+        if (count > 125) {
             solver.update(graph);
         }
+//
+//        if (count == 100) {
+//            Vertex v3 = new Vertex(3840/2, 2180/2 + 500);
+//            graph.addVertex(v3);
+//
+//            animationScheduler.scale(v3,100,20,0,200);
+//        }
+//
+//        if (count == 150){
+//            graph.addEdge(1,2);
+//            animationScheduler.drawGraph(graph);
+//        }
+//        if (count > 150) {
+//            solver.update(graph);
+//        }
+//        if (count == 225){
+//            graph.addEdge(0,2);
+//            animationScheduler.drawGraph(graph);
+//        }
+
 
         if (count < VIDEO_LENGTH + animationStart && count > animationStart && isRecording) {
             animationScheduler.update(gc);

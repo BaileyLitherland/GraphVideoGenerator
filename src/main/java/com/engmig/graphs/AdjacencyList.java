@@ -23,7 +23,7 @@ public class AdjacencyList extends Graph{
     @Override
     public void addVertex(Vertex v){
         vertices.add(v);
-        edges.add(new ArrayList<Integer>());
+        edges.add(new ArrayList<>());
     }
 
     // For if we are dealing with vertices index
@@ -208,7 +208,7 @@ public class AdjacencyList extends Graph{
 
 
 //    @Override
-    public ArrayList<Vertex> getNeighbourss(int x) {
+    public ArrayList<Vertex> getNeighbourszx(int x) {
         ArrayList<Vertex> rtnArray = new ArrayList<Vertex>();
         //if (edges.size() > 0) {
             for (Integer vertex : edges.get(x)) {
@@ -227,12 +227,6 @@ public class AdjacencyList extends Graph{
 
 //    @Override
 
-
-
-//    @Override
-    public double getEdgeValue(int x, int y) {
-        return 0;
-    }
 
 
 //    @Override
