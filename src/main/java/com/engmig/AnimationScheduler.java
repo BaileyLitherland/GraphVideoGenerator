@@ -75,7 +75,7 @@ public class AnimationScheduler {
                     EdgeLine edge = new EdgeLine(v, u);
                     edge.setEndOfLine(v.getPos());
                     //System.out.println("end pos in animation make graph appear method"  + u.getPos());
-                    TranslateTo t = new TranslateTo(edge, u.getPos(), vertexScaleTime*2,startFrame + currentFrameNum * (vertexScaleTime)+ vertexScaleTime);
+                    TranslateTo t = new TranslateTo(edge, u.getPos(), vertexScaleTime*2,startFrame + currentFrameNum * (vertexScaleTime)+ vertexScaleTime/2);
                     t.setFunction(new EaseOutCubic());
                     animations.add(t);
 
